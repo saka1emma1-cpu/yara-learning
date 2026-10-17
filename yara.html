@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yara Kids - ABC & 123</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',system-ui}
+  body{background:#FFF8E7;min-height:100vh}
+  header{background:#FF6B6B;color:white;padding:16px;text-align:center;position:sticky;top:0;z-index:10}
+  header h1{font-size:28px} header p{opacity:.9;font-size:14px}
+  .tabs{display:flex;gap:8px;padding:12px;overflow:auto;background:white;box-shadow:0 2px 8px #0001;position:sticky;top:70px;z-index:9}
+  .tab{padding:10px 18px;border-radius:20px;border:2px solid #eee;background:white;font-weight:800;white-space:nowrap;cursor:pointer}
+  .tab.active{background:#FF6B6B;color:white;border-color:#FF6B6B}
+  .page{padding:16px;display:none} .page.active{display:block}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .card{background:white;border-radius:20px;padding:18px 10px;text-align:center;box-shadow:0 4px 12px #0001;cursor:pointer;transition:.2s;border-bottom:5px solid #eee}
+  .card:active{transform:scale(.95)}
+  .card .emoji{font-size:42px} .card .letter{font-size:32px;font-weight:900;color:#333}
+  .card .word{font-size:13px;color:#666;margin-top:4px;font-weight:700}
+  .number-card .dots{font-size:20px;margin-top:6px}
+  .color-card{height:120px;display:flex;align-items:end;justify-content:center;padding-bottom:12px;color:white;font-weight:900;text-shadow:0 1px 2px #0008;font-size:18px}
+  .speak-btn{margin:16px auto;display:block;background:#4ECDC4;color:white;border:none;padding:12px 24px;border-radius:30px;font-weight:800;font-size:16px}
+  .parent{margin:20px 16px;background:white;padding:14px;border-radius:16px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>🌈 Yara Kids</h1>
+  <p>Tap to hear sound 🔊</p>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="showPage('abc')">🔤 ABC</button>
+  <button class="tab" onclick="showPage('num')">🔢 123</button>
+  <button class="tab" onclick="showPage('color')">🎨 Colors</button>
+  <button class="tab" onclick="showPage('animal')">🦁 Animals</button>
+</div>
+
+<!-- ABC -->
+<div id="abc" class="page active">
+  <div class="grid" id="abcGrid"></div>
+</div>
+
+<!-- NUMBERS -->
+<div id="num" class="page">
+  <div class="grid" id="numGrid"></div>
+</div>
+
+<!-- COLORS -->
+<div id="color" class="page">
+  <div class="grid" id="colorGrid"></div>
+</div>
+
+<!-- ANIMALS -->
+<div id="animal" class="page">
+  <div class="grid" id="animalGrid"></div>
+</div>
+
+<div class="parent">⭐ Today: <span id="learnCount">0</span> words learned — Parent check</div>
+
+<button class="speak-btn" onclick="speak('Hello little star! You are doing great!')">👋 Say Hello</button>
+
+<script>
+const abcData = [
+  {l:'A',e:'🍎',w:'Apple'},{l:'B',e:'⚽',w:'Ball'},{l:'C',e:'🐱',w:'Cat'},{l:'D',e:'🐶',w:'Dog'},
+  {l:'E',e:'🐘',w:'Elephant'},{l:'F',e:'🐟',w:'Fish'},{l:'G',e:'🍇',w:'Grapes'},{l:'H',e:'🏠',w:'House'},
+  {l:'I',e:'🍦',w:'Ice Cream'},{l:'J',e:'🧃',w:'Juice'},{l:'K',e:'🪁',w:'Kite'},{l:'L',e:'🦁',w:'Lion'},
+  {l:'M',e:'🐒',w:'Monkey'},{l:'N',e:'🥜',w:'Nut'},{l:'O',e:'🍊',w:'Orange'},{l:'P',e:'🐼',w:'Panda'},
+  {l:'Q',e:'👑',w:'Queen'},{l:'R',e:'🌈',w:'Rainbow'},{l:'S',e:'☀️',w:'Sun'},{l:'T',e:'🐯',w:'Tiger'},
+  {l:'U',e:'☂️',w:'Umbrella'},{l:'V',e:'🎻',w:'Violin'},{l:'W',e:'🐳',w:'Whale'},{l:'X',e:'🎄',w:'Xmas Tree'},
+  {l:'Y',e:'🟡',w:'Yellow'},{l:'Z',e:'🦓',w:'Zebra'}
+];
+const colors = [
+  {n:'Red',c:'#FF3B30'},{n:'Blue',c:'#007AFF'},{n:'Green',c:'#34C759'},{n:'Yellow',c:'#FFCC00'},
+  {n:'Orange',c:'#FF9500'},{n:'Purple',c:'#AF52DE'},{n:'Pink',c:'#FF2D55'},{n:'Brown',c:'#8B4513'}
+];
+const animals = [
+  {n:'Cat',e:'🐱'},{n:'Dog',e:'🐶'},{n:'Lion',e:'🦁'},{n:'Elephant',e:'🐘'},{n:'Monkey',e:'🐒'},{n:'Tiger',e:'🐯'},{n:'Zebra',e:'🦓'},{n:'Panda',e:'🐼'},{n:'Fish',e:'🐟'}
+];
+
+let count=parseInt(localStorage.getItem('yaraCount')||'0');
+document.getElementById('learnCount').innerText=count;
+
+function speak(t){ 
+  const u = new SpeechSynthesisUtterance(t);
+  u.rate=0.8; u.pitch=1.2;
+  speechSynthesis.speak(u);
+  count++; localStorage.setItem('yaraCount',count);
+  document.getElementById('learnCount').innerText=count;
+}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  speak(id==='abc'?'Alphabet':id==='num'?'Numbers':id==='color'?'Colors':'Animals');
+}
+
+// Render ABC
+document.getElementById('abcGrid').innerHTML = abcData.map(i=>`
+  <div class="card" onclick="speak('${i.l} is for ${i.w}')">
+    <div class="emoji">${i.e}</div>
+    <div class="letter">${i.l}</div>
+    <div class="word">${i.w}</div>
+  </div>
+`).join('');
+
+// Numbers 1-10
+document.getElementById('numGrid').innerHTML = Array.from({length:10},(_,k)=>{
+  const n=k+1; const dots='●'.repeat(n);
+  return `<div class="card number-card" onclick="speak('${n}')">
+    <div class="letter">${n}</div>
+    <div class="dots">${dots}</div>
+    <div class="word">${n} ${n===1?'apple':'apples'}</div>
+  </div>`;
+}).join('');
+
+// Colors
+document.getElementById('colorGrid').innerHTML = colors.map(c=>`
+  <div class="card color-card" style="background:${c.c}" onclick="speak('${c.n}')">
+    ${c.n}
+  </div>
+`).join('');
+
+// Animals
+document.getElementById('animalGrid').innerHTML = animals.map(a=>`
+  <div class="card" onclick="speak('${a.n}')">
+    <div class="emoji">${a.e}</div>
+    <div class="word">${a.n}</div>
+  </div>
+`).join('');
+
+</script>
+</body>
+</html>
