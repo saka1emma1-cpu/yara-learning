@@ -64,8 +64,17 @@ const colors = [
   {n:'Red',c:'#FF3B30'},{n:'Blue',c:'#007AFF'},{n:'Green',c:'#34C759'},{n:'Yellow',c:'#FFCC00'},
   {n:'Orange',c:'#FF9500'},{n:'Purple',c:'#AF52DE'},{n:'Pink',c:'#FF2D55'},{n:'Brown',c:'#8B4513'}
 ];
+// NEW BIG ZOO 36 ANIMALS
 const animals = [
-  {n:'Cat',e:'🐱'},{n:'Dog',e:'🐶'},{n:'Lion',e:'🦁'},{n:'Elephant',e:'🐘'},{n:'Monkey',e:'🐒'},{n:'Tiger',e:'🐯'},{n:'Zebra',e:'🦓'},{n:'Panda',e:'🐼'},{n:'Fish',e:'🐟'}
+  {n:'Cat',e:'🐱'}, {n:'Dog',e:'🐶'}, {n:'Lion',e:'🦁'}, {n:'Elephant',e:'🐘'}, 
+  {n:'Monkey',e:'🐒'}, {n:'Tiger',e:'🐯'}, {n:'Zebra',e:'🦓'}, {n:'Panda',e:'🐼'}, {n:'Fish',e:'🐟'},
+  {n:'Cow',e:'🐮'}, {n:'Horse',e:'🐴'}, {n:'Chicken',e:'🐔'}, {n:'Duck',e:'🦆'}, {n:'Sheep',e:'🐑'}, 
+  {n:'Pig',e:'🐷'}, {n:'Goat',e:'🐐'}, {n:'Rabbit',e:'🐰'}, {n:'Bear',e:'🐻'},
+  {n:'Giraffe',e:'🦒'}, {n:'Hippo',e:'🦛'}, {n:'Crocodile',e:'🐊'}, {n:'Snake',e:'🐍'}, 
+  {n:'Turtle',e:'🐢'}, {n:'Frog',e:'🐸'}, {n:'Mouse',e:'🐭'},
+  {n:'Parrot',e:'🦜'}, {n:'Owl',e:'🦉'}, {n:'Penguin',e:'🐧'}, {n:'Eagle',e:'🦅'}, 
+  {n:'Peacock',e:'🦚'}, {n:'Flamingo',e:'🦩'}, {n:'Bee',e:'🐝'}, {n:'Butterfly',e:'🦋'},
+  {n:'Whale',e:'🐳'}, {n:'Dolphin',e:'🐬'}, {n:'Octopus',e:'🐙'}
 ];
 
 let count=parseInt(localStorage.getItem('yaraCount')||'0');
@@ -87,7 +96,6 @@ function showPage(id, btn){
   speak(id==='abc'?'Alphabet':id==='num'?'Numbers one to one hundred':id==='color'?'Colors':'Animals');
 }
 
-// ABC
 document.getElementById('abcGrid').innerHTML = abcData.map(i=>`
   <div class="card" onclick="speak('${i.l} is for ${i.w}')">
     <div class="emoji">${i.e}</div>
@@ -96,7 +104,6 @@ document.getElementById('abcGrid').innerHTML = abcData.map(i=>`
   </div>
 `).join('');
 
-// NUMBERS 1-100 Smart (1-20 + 30-100 tens)
 const numbersToShow = [...Array(20).keys()].map(i=>i+1).concat([30,40,50,60,70,80,90,100]);
 document.getElementById('numGrid').innerHTML = numbersToShow.map(n=>{
   let dots = '';
@@ -104,10 +111,8 @@ document.getElementById('numGrid').innerHTML = numbersToShow.map(n=>{
   else if(n<=20) dots='●'.repeat(10)+' + '+ (n-10);
   else if(n===100) dots='🎉🎉🎉';
   else dots='🔟 x '+(n/10);
-  
   let cls = n===100 ? 'card number-card hundred' : 'card number-card';
   let label = n===100 ? 'ONE HUNDRED!' : n+' '+(n===1?'apple':'apples');
-  
   return `<div class="${cls}" onclick="speak('${n===100?'One hundred! You are a star!':n}')">
     <div class="letter">${n}</div>
     <div class="dots">${dots}</div>
@@ -115,14 +120,12 @@ document.getElementById('numGrid').innerHTML = numbersToShow.map(n=>{
   </div>`;
 }).join('');
 
-// COLORS
 document.getElementById('colorGrid').innerHTML = colors.map(c=>`
   <div class="card color-card" style="background:${c.c}" onclick="speak('${c.n}')">
     ${c.n}
   </div>
 `).join('');
 
-// ANIMALS
 document.getElementById('animalGrid').innerHTML = animals.map(a=>`
   <div class="card" onclick="speak('${a.n}')">
     <div class="emoji">${a.e}</div>
