@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yara Kids - ABC & 123</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff6b6b">
+<link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f308.png">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',system-ui}
   body{background:#FFF8E7;min-height:100vh}
@@ -31,34 +34,18 @@
 </header>
 
 <div class="tabs">
-  <button class="tab active" onclick="showPage('abc')">🔤 ABC</button>
-  <button class="tab" onclick="showPage('num')">🔢 123</button>
-  <button class="tab" onclick="showPage('color')">🎨 Colors</button>
-  <button class="tab" onclick="showPage('animal')">🦁 Animals</button>
+  <button class="tab active" onclick="showPage('abc', this)">🔤 ABC</button>
+  <button class="tab" onclick="showPage('num', this)">🔢 123</button>
+  <button class="tab" onclick="showPage('color', this)">🎨 Colors</button>
+  <button class="tab" onclick="showPage('animal', this)">🦁 Animals</button>
 </div>
 
-<!-- ABC -->
-<div id="abc" class="page active">
-  <div class="grid" id="abcGrid"></div>
-</div>
-
-<!-- NUMBERS -->
-<div id="num" class="page">
-  <div class="grid" id="numGrid"></div>
-</div>
-
-<!-- COLORS -->
-<div id="color" class="page">
-  <div class="grid" id="colorGrid"></div>
-</div>
-
-<!-- ANIMALS -->
-<div id="animal" class="page">
-  <div class="grid" id="animalGrid"></div>
-</div>
+<div id="abc" class="page active"><div class="grid" id="abcGrid"></div></div>
+<div id="num" class="page"><div class="grid" id="numGrid"></div></div>
+<div id="color" class="page"><div class="grid" id="colorGrid"></div></div>
+<div id="animal" class="page"><div class="grid" id="animalGrid"></div></div>
 
 <div class="parent">⭐ Today: <span id="learnCount">0</span> words learned — Parent check</div>
-
 <button class="speak-btn" onclick="speak('Hello little star! You are doing great!')">👋 Say Hello</button>
 
 <script>
@@ -78,10 +65,8 @@ const colors = [
 const animals = [
   {n:'Cat',e:'🐱'},{n:'Dog',e:'🐶'},{n:'Lion',e:'🦁'},{n:'Elephant',e:'🐘'},{n:'Monkey',e:'🐒'},{n:'Tiger',e:'🐯'},{n:'Zebra',e:'🦓'},{n:'Panda',e:'🐼'},{n:'Fish',e:'🐟'}
 ];
-
 let count=parseInt(localStorage.getItem('yaraCount')||'0');
 document.getElementById('learnCount').innerText=count;
-
 function speak(t){ 
   const u = new SpeechSynthesisUtterance(t);
   u.rate=0.8; u.pitch=1.2;
@@ -89,16 +74,13 @@ function speak(t){
   count++; localStorage.setItem('yaraCount',count);
   document.getElementById('learnCount').innerText=count;
 }
-
-function showPage(id){
+function showPage(id, btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
+  btn.classList.add('active');
   speak(id==='abc'?'Alphabet':id==='num'?'Numbers':id==='color'?'Colors':'Animals');
 }
-
-// Render ABC
 document.getElementById('abcGrid').innerHTML = abcData.map(i=>`
   <div class="card" onclick="speak('${i.l} is for ${i.w}')">
     <div class="emoji">${i.e}</div>
@@ -106,8 +88,6 @@ document.getElementById('abcGrid').innerHTML = abcData.map(i=>`
     <div class="word">${i.w}</div>
   </div>
 `).join('');
-
-// Numbers 1-10
 document.getElementById('numGrid').innerHTML = Array.from({length:10},(_,k)=>{
   const n=k+1; const dots='●'.repeat(n);
   return `<div class="card number-card" onclick="speak('${n}')">
@@ -116,22 +96,17 @@ document.getElementById('numGrid').innerHTML = Array.from({length:10},(_,k)=>{
     <div class="word">${n} ${n===1?'apple':'apples'}</div>
   </div>`;
 }).join('');
-
-// Colors
 document.getElementById('colorGrid').innerHTML = colors.map(c=>`
   <div class="card color-card" style="background:${c.c}" onclick="speak('${c.n}')">
     ${c.n}
   </div>
 `).join('');
-
-// Animals
 document.getElementById('animalGrid').innerHTML = animals.map(a=>`
   <div class="card" onclick="speak('${a.n}')">
     <div class="emoji">${a.e}</div>
     <div class="word">${a.n}</div>
   </div>
 `).join('');
-
 </script>
 </body>
 </html>
