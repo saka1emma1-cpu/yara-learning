@@ -21,21 +21,23 @@
   .card:active{transform:scale(.95)}
   .card .emoji{font-size:42px} .card .letter{font-size:32px;font-weight:900;color:#333}
   .card .word{font-size:13px;color:#666;margin-top:4px;font-weight:700}
-  .number-card .dots{font-size:20px;margin-top:6px}
+  .number-card .dots{font-size:16px;margin-top:6px;word-break:break-all}
   .color-card{height:120px;display:flex;align-items:end;justify-content:center;padding-bottom:12px;color:white;font-weight:900;text-shadow:0 1px 2px #0008;font-size:18px}
   .speak-btn{margin:16px auto;display:block;background:#4ECDC4;color:white;border:none;padding:12px 24px;border-radius:30px;font-weight:800;font-size:16px}
   .parent{margin:20px 16px;background:white;padding:14px;border-radius:16px;text-align:center}
+  .hundred{background:linear-gradient(135deg,#FF6B6B,#FFD93D)!important;color:white!important;border-bottom-color:#FF6B6B!important}
+  .hundred .letter,.hundred .word,.hundred .dots{color:white!important}
 </style>
 </head>
 <body>
 <header>
   <h1>🌈 Yara Kids</h1>
-  <p>Tap to hear sound 🔊</p>
+  <p>Tap to hear sound 🔊 — Now 1 to 100!</p>
 </header>
 
 <div class="tabs">
   <button class="tab active" onclick="showPage('abc', this)">🔤 ABC</button>
-  <button class="tab" onclick="showPage('num', this)">🔢 123</button>
+  <button class="tab" onclick="showPage('num', this)">🔢 1-100</button>
   <button class="tab" onclick="showPage('color', this)">🎨 Colors</button>
   <button class="tab" onclick="showPage('animal', this)">🦁 Animals</button>
 </div>
@@ -65,22 +67,27 @@ const colors = [
 const animals = [
   {n:'Cat',e:'🐱'},{n:'Dog',e:'🐶'},{n:'Lion',e:'🦁'},{n:'Elephant',e:'🐘'},{n:'Monkey',e:'🐒'},{n:'Tiger',e:'🐯'},{n:'Zebra',e:'🦓'},{n:'Panda',e:'🐼'},{n:'Fish',e:'🐟'}
 ];
+
 let count=parseInt(localStorage.getItem('yaraCount')||'0');
 document.getElementById('learnCount').innerText=count;
+
 function speak(t){ 
   const u = new SpeechSynthesisUtterance(t);
-  u.rate=0.8; u.pitch=1.2;
+  u.rate=0.8; u.pitch=1.1;
   speechSynthesis.speak(u);
   count++; localStorage.setItem('yaraCount',count);
   document.getElementById('learnCount').innerText=count;
 }
+
 function showPage(id, btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  speak(id==='abc'?'Alphabet':id==='num'?'Numbers':id==='color'?'Colors':'Animals');
+  speak(id==='abc'?'Alphabet':id==='num'?'Numbers one to one hundred':id==='color'?'Colors':'Animals');
 }
+
+// ABC
 document.getElementById('abcGrid').innerHTML = abcData.map(i=>`
   <div class="card" onclick="speak('${i.l} is for ${i.w}')">
     <div class="emoji">${i.e}</div>
@@ -88,19 +95,34 @@ document.getElementById('abcGrid').innerHTML = abcData.map(i=>`
     <div class="word">${i.w}</div>
   </div>
 `).join('');
-document.getElementById('numGrid').innerHTML = Array.from({length:10},(_,k)=>{
-  const n=k+1; const dots='●'.repeat(n);
-  return `<div class="card number-card" onclick="speak('${n}')">
+
+// NUMBERS 1-100 Smart (1-20 + 30-100 tens)
+const numbersToShow = [...Array(20).keys()].map(i=>i+1).concat([30,40,50,60,70,80,90,100]);
+document.getElementById('numGrid').innerHTML = numbersToShow.map(n=>{
+  let dots = '';
+  if(n<=10) dots='●'.repeat(n);
+  else if(n<=20) dots='●'.repeat(10)+' + '+ (n-10);
+  else if(n===100) dots='🎉🎉🎉';
+  else dots='🔟 x '+(n/10);
+  
+  let cls = n===100 ? 'card number-card hundred' : 'card number-card';
+  let label = n===100 ? 'ONE HUNDRED!' : n+' '+(n===1?'apple':'apples');
+  
+  return `<div class="${cls}" onclick="speak('${n===100?'One hundred! You are a star!':n}')">
     <div class="letter">${n}</div>
     <div class="dots">${dots}</div>
-    <div class="word">${n} ${n===1?'apple':'apples'}</div>
+    <div class="word">${label}</div>
   </div>`;
 }).join('');
+
+// COLORS
 document.getElementById('colorGrid').innerHTML = colors.map(c=>`
   <div class="card color-card" style="background:${c.c}" onclick="speak('${c.n}')">
     ${c.n}
   </div>
 `).join('');
+
+// ANIMALS
 document.getElementById('animalGrid').innerHTML = animals.map(a=>`
   <div class="card" onclick="speak('${a.n}')">
     <div class="emoji">${a.e}</div>
