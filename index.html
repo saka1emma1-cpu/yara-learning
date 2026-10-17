@@ -22,7 +22,8 @@
   .card .emoji{font-size:42px} .card .letter{font-size:32px;font-weight:900;color:#333}
   .card .word{font-size:13px;color:#666;margin-top:4px;font-weight:700}
   .number-card .dots{font-size:16px;margin-top:6px;word-break:break-all}
-  .color-card{height:120px;display:flex;align-items:end;justify-content:center;padding-bottom:12px;color:white;font-weight:900;text-shadow:0 1px 2px #0008;font-size:18px}
+  .color-card{height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;font-weight:900;text-shadow:0 1px 3px #0008;font-size:15px;gap:4px}
+  .color-card span.emoji{font-size:26px;text-shadow:none}
   .speak-btn{margin:16px auto;display:block;background:#4ECDC4;color:white;border:none;padding:12px 24px;border-radius:30px;font-weight:800;font-size:16px}
   .parent{margin:20px 16px;background:white;padding:14px;border-radius:16px;text-align:center}
   .hundred{background:linear-gradient(135deg,#FF6B6B,#FFD93D)!important;color:white!important;border-bottom-color:#FF6B6B!important}
@@ -38,13 +39,13 @@
 <div class="tabs">
   <button class="tab active" onclick="showPage('abc', this)">🔤 ABC</button>
   <button class="tab" onclick="showPage('num', this)">🔢 1-100</button>
-  <button class="tab" onclick="showPage('color', this)">🎨 Colors</button>
+  <button class="tab active" onclick="showPage('color', this)">🎨 Colors</button>
   <button class="tab" onclick="showPage('animal', this)">🦁 Animals</button>
 </div>
 
-<div id="abc" class="page active"><div class="grid" id="abcGrid"></div></div>
+<div id="abc" class="page"><div class="grid" id="abcGrid"></div></div>
 <div id="num" class="page"><div class="grid" id="numGrid"></div></div>
-<div id="color" class="page"><div class="grid" id="colorGrid"></div></div>
+<div id="color" class="page active"><div class="grid" id="colorGrid"></div></div>
 <div id="animal" class="page"><div class="grid" id="animalGrid"></div></div>
 
 <div class="parent">⭐ Today: <span id="learnCount">0</span> words learned — Parent check</div>
@@ -60,11 +61,18 @@ const abcData = [
   {l:'U',e:'☂️',w:'Umbrella'},{l:'V',e:'🎻',w:'Violin'},{l:'W',e:'🐳',w:'Whale'},{l:'X',e:'🎄',w:'Xmas Tree'},
   {l:'Y',e:'🟡',w:'Yellow'},{l:'Z',e:'🦓',w:'Zebra'}
 ];
+// ALL COLORS - 25 colors
 const colors = [
-  {n:'Red',c:'#FF3B30'},{n:'Blue',c:'#007AFF'},{n:'Green',c:'#34C759'},{n:'Yellow',c:'#FFCC00'},
-  {n:'Orange',c:'#FF9500'},{n:'Purple',c:'#AF52DE'},{n:'Pink',c:'#FF2D55'},{n:'Brown',c:'#8B4513'}
+  {n:'Red',c:'#FF3B30',e:'❤️'}, {n:'Blue',c:'#007AFF',e:'💙'}, {n:'Green',c:'#34C759',e:'💚'},
+  {n:'Yellow',c:'#FFCC00',e:'💛'}, {n:'Orange',c:'#FF9500',e:'🧡'}, {n:'Purple',c:'#AF52DE',e:'💜'},
+  {n:'Pink',c:'#FF2D55',e:'💗'}, {n:'Brown',c:'#8B4513',e:'🤎'}, {n:'Black',c:'#000000',e:'🖤'},
+  {n:'White',c:'#FFFFFF',e:'🤍',t:'#333'}, {n:'Gray',c:'#8E8E93',e:'🩶'}, {n:'Gold',c:'#FFD700',e:'⭐'},
+  {n:'Silver',c:'#C0C0C0',e:'✨'}, {n:'Cyan',c:'#00BCD4',e:'🩵'}, {n:'Lime',c:'#8BC34A',e:'🍋'},
+  {n:'Magenta',c:'#E91E63',e:'🌺'}, {n:'Maroon',c:'#800000',e:'🍷'}, {n:'Navy',c:'#001F54',e:'🌌'},
+  {n:'Teal',c:'#008080',e:'🦚'}, {n:'Indigo',c:'#3F51B5',e:'🔮'}, {n:'Violet',c:'#9C27B0',e:'☂️'},
+  {n:'Lavender',c:'#CE93D8',e:'💐'}, {n:'Peach',c:'#FFCBA4',e:'🍑',t:'#333'}, {n:'Coral',c:'#FF6F61',e:'🪸'},
+  {n:'Turquoise',c:'#40E0D0',e:'🌊'}
 ];
-// NEW BIG ZOO 36 ANIMALS
 const animals = [
   {n:'Cat',e:'🐱'}, {n:'Dog',e:'🐶'}, {n:'Lion',e:'🦁'}, {n:'Elephant',e:'🐘'}, 
   {n:'Monkey',e:'🐒'}, {n:'Tiger',e:'🐯'}, {n:'Zebra',e:'🦓'}, {n:'Panda',e:'🐼'}, {n:'Fish',e:'🐟'},
@@ -106,22 +114,17 @@ document.getElementById('abcGrid').innerHTML = abcData.map(i=>`
 
 const numbersToShow = [...Array(20).keys()].map(i=>i+1).concat([30,40,50,60,70,80,90,100]);
 document.getElementById('numGrid').innerHTML = numbersToShow.map(n=>{
-  let dots = '';
-  if(n<=10) dots='●'.repeat(n);
-  else if(n<=20) dots='●'.repeat(10)+' + '+ (n-10);
-  else if(n===100) dots='🎉🎉🎉';
-  else dots='🔟 x '+(n/10);
+  let dots = n<=10 ? '●'.repeat(n) : n<=20 ? '●'.repeat(10)+' + '+(n-10) : n===100 ? '🎉🎉🎉' : '🔟 x '+(n/10);
   let cls = n===100 ? 'card number-card hundred' : 'card number-card';
   let label = n===100 ? 'ONE HUNDRED!' : n+' '+(n===1?'apple':'apples');
   return `<div class="${cls}" onclick="speak('${n===100?'One hundred! You are a star!':n}')">
-    <div class="letter">${n}</div>
-    <div class="dots">${dots}</div>
-    <div class="word">${label}</div>
+    <div class="letter">${n}</div><div class="dots">${dots}</div><div class="word">${label}</div>
   </div>`;
 }).join('');
 
 document.getElementById('colorGrid').innerHTML = colors.map(c=>`
-  <div class="card color-card" style="background:${c.c}" onclick="speak('${c.n}')">
+  <div class="card color-card" style="background:${c.c}; color:${c.t||'white'}; border-bottom-color:${c.c}" onclick="speak('${c.n}')">
+    <span class="emoji">${c.e}</span>
     ${c.n}
   </div>
 `).join('');
