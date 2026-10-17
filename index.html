@@ -22,8 +22,13 @@
   .card .emoji{font-size:42px} .card .letter{font-size:32px;font-weight:900;color:#333}
   .card .word{font-size:13px;color:#666;margin-top:4px;font-weight:700}
   .number-card .dots{font-size:16px;margin-top:6px;word-break:break-all}
-  .color-card{height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;font-weight:900;text-shadow:0 1px 3px #0008;font-size:15px;gap:4px}
-  .color-card span.emoji{font-size:26px;text-shadow:none}
+  .color-card{height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;font-weight:900;text-shadow:0 1px 3px #0008;font-size:14px;gap:4px}
+  .color-card span.emoji{font-size:22px;text-shadow:none}
+  .color-section{margin-bottom:24px}
+  .color-section h3{font-size:16px;margin-bottom:10px;padding:8px 14px;border-radius:20px;display:inline-block;color:white}
+  .primary h3{background:#FF3B30} .secondary h3{background:#34C759}
+  .neutral h3{background:#8E8E93} .fancy h3{background:#AF52DE}
+  .mix-hint{font-size:11px;opacity:0.9;font-weight:600;margin-top:2px}
   .speak-btn{margin:16px auto;display:block;background:#4ECDC4;color:white;border:none;padding:12px 24px;border-radius:30px;font-weight:800;font-size:16px}
   .parent{margin:20px 16px;background:white;padding:14px;border-radius:16px;text-align:center}
   .hundred{background:linear-gradient(135deg,#FF6B6B,#FFD93D)!important;color:white!important;border-bottom-color:#FF6B6B!important}
@@ -37,7 +42,7 @@
 </header>
 
 <div class="tabs">
-  <button class="tab active" onclick="showPage('abc', this)">🔤 ABC</button>
+  <button class="tab" onclick="showPage('abc', this)">🔤 ABC</button>
   <button class="tab" onclick="showPage('num', this)">🔢 1-100</button>
   <button class="tab active" onclick="showPage('color', this)">🎨 Colors</button>
   <button class="tab" onclick="showPage('animal', this)">🦁 Animals</button>
@@ -45,7 +50,7 @@
 
 <div id="abc" class="page"><div class="grid" id="abcGrid"></div></div>
 <div id="num" class="page"><div class="grid" id="numGrid"></div></div>
-<div id="color" class="page active"><div class="grid" id="colorGrid"></div></div>
+<div id="color" class="page active"></div>
 <div id="animal" class="page"><div class="grid" id="animalGrid"></div></div>
 
 <div class="parent">⭐ Today: <span id="learnCount">0</span> words learned — Parent check</div>
@@ -61,18 +66,46 @@ const abcData = [
   {l:'U',e:'☂️',w:'Umbrella'},{l:'V',e:'🎻',w:'Violin'},{l:'W',e:'🐳',w:'Whale'},{l:'X',e:'🎄',w:'Xmas Tree'},
   {l:'Y',e:'🟡',w:'Yellow'},{l:'Z',e:'🦓',w:'Zebra'}
 ];
-// ALL COLORS - 25 colors
-const colors = [
-  {n:'Red',c:'#FF3B30',e:'❤️'}, {n:'Blue',c:'#007AFF',e:'💙'}, {n:'Green',c:'#34C759',e:'💚'},
-  {n:'Yellow',c:'#FFCC00',e:'💛'}, {n:'Orange',c:'#FF9500',e:'🧡'}, {n:'Purple',c:'#AF52DE',e:'💜'},
-  {n:'Pink',c:'#FF2D55',e:'💗'}, {n:'Brown',c:'#8B4513',e:'🤎'}, {n:'Black',c:'#000000',e:'🖤'},
-  {n:'White',c:'#FFFFFF',e:'🤍',t:'#333'}, {n:'Gray',c:'#8E8E93',e:'🩶'}, {n:'Gold',c:'#FFD700',e:'⭐'},
-  {n:'Silver',c:'#C0C0C0',e:'✨'}, {n:'Cyan',c:'#00BCD4',e:'🩵'}, {n:'Lime',c:'#8BC34A',e:'🍋'},
-  {n:'Magenta',c:'#E91E63',e:'🌺'}, {n:'Maroon',c:'#800000',e:'🍷'}, {n:'Navy',c:'#001F54',e:'🌌'},
-  {n:'Teal',c:'#008080',e:'🦚'}, {n:'Indigo',c:'#3F51B5',e:'🔮'}, {n:'Violet',c:'#9C27B0',e:'☂️'},
-  {n:'Lavender',c:'#CE93D8',e:'💐'}, {n:'Peach',c:'#FFCBA4',e:'🍑',t:'#333'}, {n:'Coral',c:'#FF6F61',e:'🪸'},
-  {n:'Turquoise',c:'#40E0D0',e:'🌊'}
-];
+
+const colorGroups = {
+  primary: {
+    title: '🔴 Primary Colors - Mix to make others!',
+    colors: [
+      {n:'Red',c:'#FF3B30',e:'❤️',mix:'Primary'},
+      {n:'Blue',c:'#007AFF',e:'💙',mix:'Primary'},
+      {n:'Yellow',c:'#FFCC00',e:'💛',mix:'Primary'}
+    ]
+  },
+  secondary: {
+    title: '🟢 Secondary Colors - Made by mixing',
+    colors: [
+      {n:'Green',c:'#34C759',e:'💚',mix:'Blue + Yellow'},
+      {n:'Orange',c:'#FF9500',e:'🧡',mix:'Red + Yellow'},
+      {n:'Purple',c:'#AF52DE',e:'💜',mix:'Red + Blue'}
+    ]
+  },
+  neutral: {
+    title: '⚫ Neutral Colors',
+    colors: [
+      {n:'Black',c:'#000000',e:'🖤'}, {n:'White',c:'#FFFFFF',e:'🤍',t:'#333'},
+      {n:'Gray',c:'#8E8E93',e:'🩶'}, {n:'Brown',c:'#8B4513',e:'🤎'}
+    ]
+  },
+  fancy: {
+    title: '✨ Fancy Colors',
+    colors: [
+      {n:'Pink',c:'#FF2D55',e:'💗'}, {n:'Gold',c:'#FFD700',e:'⭐'},
+      {n:'Silver',c:'#C0C0C0',e:'✨'}, {n:'Cyan',c:'#00BCD4',e:'🩵'},
+      {n:'Lime',c:'#8BC34A',e:'🍋'}, {n:'Magenta',c:'#E91E63',e:'🌺'},
+      {n:'Maroon',c:'#800000',e:'🍷'}, {n:'Navy',c:'#001F54',e:'🌌'},
+      {n:'Teal',c:'#008080',e:'🦚'}, {n:'Indigo',c:'#3F51B5',e:'🔮'},
+      {n:'Violet',c:'#9C27B0',e:'☂️'}, {n:'Lavender',c:'#CE93D8',e:'💐'},
+      {n:'Peach',c:'#FFCBA4',e:'🍑',t:'#333'}, {n:'Coral',c:'#FF6F61',e:'🪸'},
+      {n:'Turquoise',c:'#40E0D0',e:'🌊'}
+    ]
+  }
+};
+
 const animals = [
   {n:'Cat',e:'🐱'}, {n:'Dog',e:'🐶'}, {n:'Lion',e:'🦁'}, {n:'Elephant',e:'🐘'}, 
   {n:'Monkey',e:'🐒'}, {n:'Tiger',e:'🐯'}, {n:'Zebra',e:'🦓'}, {n:'Panda',e:'🐼'}, {n:'Fish',e:'🐟'},
@@ -101,14 +134,12 @@ function showPage(id, btn){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  speak(id==='abc'?'Alphabet':id==='num'?'Numbers one to one hundred':id==='color'?'Colors':'Animals');
+  speak(id==='abc'?'Alphabet':id==='num'?'Numbers one to one hundred':id==='color'?'Colors: Primary and Secondary':'Animals');
 }
 
 document.getElementById('abcGrid').innerHTML = abcData.map(i=>`
   <div class="card" onclick="speak('${i.l} is for ${i.w}')">
-    <div class="emoji">${i.e}</div>
-    <div class="letter">${i.l}</div>
-    <div class="word">${i.w}</div>
+    <div class="emoji">${i.e}</div><div class="letter">${i.l}</div><div class="word">${i.w}</div>
   </div>
 `).join('');
 
@@ -122,17 +153,24 @@ document.getElementById('numGrid').innerHTML = numbersToShow.map(n=>{
   </div>`;
 }).join('');
 
-document.getElementById('colorGrid').innerHTML = colors.map(c=>`
-  <div class="card color-card" style="background:${c.c}; color:${c.t||'white'}; border-bottom-color:${c.c}" onclick="speak('${c.n}')">
-    <span class="emoji">${c.e}</span>
-    ${c.n}
-  </div>
-`).join('');
+// COLORS GROUPED
+let colorHTML = '';
+for(let groupKey in colorGroups){
+  let group = colorGroups[groupKey];
+  colorHTML += `<div class="color-section ${groupKey}"><h3>${group.title}</h3><div class="grid">`;
+  group.colors.forEach(c=>{
+    let mix = c.mix ? `<div class="mix-hint">${c.mix}</div>` : '';
+    colorHTML += `<div class="card color-card" style="background:${c.c}; color:${c.t||'white'}; border-bottom-color:${c.c}" onclick="speak('${c.mix? c.n + ', ' + c.mix : c.n}')">
+      <span class="emoji">${c.e}</span>${c.n}${mix}
+    </div>`;
+  });
+  colorHTML += `</div></div>`;
+}
+document.getElementById('color').innerHTML = colorHTML;
 
 document.getElementById('animalGrid').innerHTML = animals.map(a=>`
   <div class="card" onclick="speak('${a.n}')">
-    <div class="emoji">${a.e}</div>
-    <div class="word">${a.n}</div>
+    <div class="emoji">${a.e}</div><div class="word">${a.n}</div>
   </div>
 `).join('');
 </script>
