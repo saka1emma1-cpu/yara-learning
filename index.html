@@ -6,29 +6,33 @@
 <title>Yara Kids - ABC & 123</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ff6b6b">
-<link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f308.png">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',system-ui}
   body{background:#FFF8E7;min-height:100vh}
   header{background:#FF6B6B;color:white;padding:16px;text-align:center;position:sticky;top:0;z-index:10}
   header h1{font-size:28px} header p{opacity:.9;font-size:14px}
   .tabs{display:flex;gap:8px;padding:12px;overflow:auto;background:white;box-shadow:0 2px 8px #0001;position:sticky;top:70px;z-index:9}
-  .tab{padding:10px 18px;border-radius:20px;border:2px solid #eee;background:white;font-weight:800;white-space:nowrap;cursor:pointer}
+  .tab{padding:10px 14px;border-radius:20px;border:2px solid #eee;background:white;font-weight:800;white-space:nowrap;cursor:pointer;font-size:13px}
   .tab.active{background:#FF6B6B;color:white;border-color:#FF6B6B}
   .page{padding:16px;display:none} .page.active{display:block}
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   .card{background:white;border-radius:20px;padding:18px 10px;text-align:center;box-shadow:0 4px 12px #0001;cursor:pointer;transition:.2s;border-bottom:5px solid #eee}
   .card:active{transform:scale(.95)}
-  .card .emoji{font-size:42px} .card .letter{font-size:32px;font-weight:900;color:#333}
+  .card .emoji{font-size:42px} .card .letter{font-size:28px;font-weight:900;color:#333}
   .card .word{font-size:13px;color:#666;margin-top:4px;font-weight:700}
+  .word-card .letter{letter-spacing:3px;font-size:26px}
+  .word-card .sound{font-size:11px;color:#FF6B6B;font-weight:800;margin-top:4px}
   .number-card .dots{font-size:16px;margin-top:6px;word-break:break-all}
   .color-card{height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;font-weight:900;text-shadow:0 1px 3px #0008;font-size:14px;gap:4px}
   .color-card span.emoji{font-size:22px;text-shadow:none}
   .color-section{margin-bottom:24px}
-  .color-section h3{font-size:16px;margin-bottom:10px;padding:8px 14px;border-radius:20px;display:inline-block;color:white}
+  .color-section h3{font-size:15px;margin-bottom:10px;padding:8px 14px;border-radius:20px;display:inline-block;color:white}
   .primary h3{background:#FF3B30} .secondary h3{background:#34C759}
   .neutral h3{background:#8E8E93} .fancy h3{background:#AF52DE}
-  .mix-hint{font-size:11px;opacity:0.9;font-weight:600;margin-top:2px}
+  .word-section{margin-bottom:24px}
+  .word-section h3{font-size:15px;margin-bottom:10px;padding:8px 14px;border-radius:20px;display:inline-block;color:white}
+  .two h3{background:#4ECDC4} .three h3{background:#FF6B6B}
+  .mix-hint{font-size:10px;opacity:0.9;font-weight:600;margin-top:2px}
   .speak-btn{margin:16px auto;display:block;background:#4ECDC4;color:white;border:none;padding:12px 24px;border-radius:30px;font-weight:800;font-size:16px}
   .parent{margin:20px 16px;background:white;padding:14px;border-radius:16px;text-align:center}
   .hundred{background:linear-gradient(135deg,#FF6B6B,#FFD93D)!important;color:white!important;border-bottom-color:#FF6B6B!important}
@@ -38,18 +42,20 @@
 <body>
 <header>
   <h1>🌈 Yara Kids</h1>
-  <p>Tap to hear sound 🔊 — Now 1 to 100!</p>
+  <p>Tap to hear sound 🔊 — Now reading!</p>
 </header>
 
 <div class="tabs">
   <button class="tab" onclick="showPage('abc', this)">🔤 ABC</button>
   <button class="tab" onclick="showPage('num', this)">🔢 1-100</button>
+  <button class="tab" onclick="showPage('words', this)">📝 Words</button>
   <button class="tab active" onclick="showPage('color', this)">🎨 Colors</button>
   <button class="tab" onclick="showPage('animal', this)">🦁 Animals</button>
 </div>
 
 <div id="abc" class="page"><div class="grid" id="abcGrid"></div></div>
 <div id="num" class="page"><div class="grid" id="numGrid"></div></div>
+<div id="words" class="page"></div>
 <div id="color" class="page active"></div>
 <div id="animal" class="page"><div class="grid" id="animalGrid"></div></div>
 
@@ -67,112 +73,91 @@ const abcData = [
   {l:'Y',e:'🟡',w:'Yellow'},{l:'Z',e:'🦓',w:'Zebra'}
 ];
 
+// 2-LETTER AND 3-LETTER WORDS FOR 3-5 YEARS
+const twoLetterWords = [
+  {w:'AT',e:'🎩',s:'a-t'}, {w:'IN',e:'📥',s:'i-n'}, {w:'ON',e:'🔛',s:'o-n'},
+  {w:'UP',e:'⬆️',s:'u-p'}, {w:'IT',e:'👉',s:'i-t'}, {w:'IS',e:'✅',s:'i-s'},
+  {w:'TO',e:'➡️',s:'t-o'}, {w:'GO',e:'🏃',s:'g-o'}, {w:'MY',e:'🙋',s:'m-y'},
+  {w:'WE',e:'👫',s:'w-e'}, {w:'BE',e:'🐝',s:'b-e'}, {w:'SO',e:'😊',s:'s-o'},
+  {w:'AN',e:'🍎',s:'a-n'}, {w:'AM',e:'🕐',s:'a-m'}, {w:'ME',e:'😊',s:'m-e'}
+];
+const threeLetterWords = [
+  {w:'CAT',e:'🐱',s:'c-a-t'}, {w:'DOG',e:'🐶',s:'d-o-g'}, {w:'BAT',e:'🦇',s:'b-a-t'},
+  {w:'SUN',e:'☀️',s:'s-u-n'}, {w:'HAT',e:'🎩',s:'h-a-t'}, {w:'MAP',e:'🗺️',s:'m-a-p'},
+  {w:'CUP',e:'☕',s:'c-u-p'}, {w:'BAG',e:'👜',s:'b-a-g'}, {w:'BED',e:'🛏️',s:'b-e-d'},
+  {w:'BOX',e:'📦',s:'b-o-x'}, {w:'CAR',e:'🚗',s:'c-a-r'}, {w:'BUS',e:'🚌',s:'b-u-s'},
+  {w:'EGG',e:'🥚',s:'e-g-g'}, {w:'FOX',e:'🦊',s:'f-o-x'}, {w:'PIG',e:'🐷',s:'p-i-g'},
+  {w:'COW',e:'🐮',s:'c-o-w'}, {w:'BEE',e:'🐝',s:'b-e-e'}, {w:'ANT',e:'🐜',s:'a-n-t'},
+  {w:'TOP',e:'🌀',s:'t-o-p'}, {w:'PEN',e:'🖊️',s:'p-e-n'}, {w:'RED',e:'🔴',s:'r-e-d'},
+  {w:'LEG',e:'🦵',s:'l-e-g'}, {w:'EYE',e:'👁️',s:'e-y-e'}, {w:'EAR',e:'👂',s:'e-a-r'},
+  {w:'JAM',e:'🍓',s:'j-a-m'}, {w:'ZIP',e:'🤐',s:'z-i-p'}, {w:'VAN',e:'🚐',s:'v-a-n'},
+  {w:'MOM',e:'👩',s:'m-o-m'}, {w:'DAD',e:'👨',s:'d-a-d'}, {w:'BOY',e:'👦',s:'b-o-y'},
+  {w:'GIRL',e:'👧',s:'g-i-r-l'} // bonus 4-letter
+];
+
 const colorGroups = {
-  primary: {
-    title: '🔴 Primary Colors - Mix to make others!',
-    colors: [
-      {n:'Red',c:'#FF3B30',e:'❤️',mix:'Primary'},
-      {n:'Blue',c:'#007AFF',e:'💙',mix:'Primary'},
-      {n:'Yellow',c:'#FFCC00',e:'💛',mix:'Primary'}
-    ]
-  },
-  secondary: {
-    title: '🟢 Secondary Colors - Made by mixing',
-    colors: [
-      {n:'Green',c:'#34C759',e:'💚',mix:'Blue + Yellow'},
-      {n:'Orange',c:'#FF9500',e:'🧡',mix:'Red + Yellow'},
-      {n:'Purple',c:'#AF52DE',e:'💜',mix:'Red + Blue'}
-    ]
-  },
-  neutral: {
-    title: '⚫ Neutral Colors',
-    colors: [
-      {n:'Black',c:'#000000',e:'🖤'}, {n:'White',c:'#FFFFFF',e:'🤍',t:'#333'},
-      {n:'Gray',c:'#8E8E93',e:'🩶'}, {n:'Brown',c:'#8B4513',e:'🤎'}
-    ]
-  },
-  fancy: {
-    title: '✨ Fancy Colors',
-    colors: [
-      {n:'Pink',c:'#FF2D55',e:'💗'}, {n:'Gold',c:'#FFD700',e:'⭐'},
-      {n:'Silver',c:'#C0C0C0',e:'✨'}, {n:'Cyan',c:'#00BCD4',e:'🩵'},
-      {n:'Lime',c:'#8BC34A',e:'🍋'}, {n:'Magenta',c:'#E91E63',e:'🌺'},
-      {n:'Maroon',c:'#800000',e:'🍷'}, {n:'Navy',c:'#001F54',e:'🌌'},
-      {n:'Teal',c:'#008080',e:'🦚'}, {n:'Indigo',c:'#3F51B5',e:'🔮'},
-      {n:'Violet',c:'#9C27B0',e:'☂️'}, {n:'Lavender',c:'#CE93D8',e:'💐'},
-      {n:'Peach',c:'#FFCBA4',e:'🍑',t:'#333'}, {n:'Coral',c:'#FF6F61',e:'🪸'},
-      {n:'Turquoise',c:'#40E0D0',e:'🌊'}
-    ]
-  }
+  primary: { title: '🔴 Primary - Mix to make others!', colors: [
+      {n:'Red',c:'#FF3B30',e:'❤️',mix:'Primary'}, {n:'Blue',c:'#007AFF',e:'💙',mix:'Primary'}, {n:'Yellow',c:'#FFCC00',e:'💛',mix:'Primary'}]},
+  secondary: { title: '🟢 Secondary - Made by mixing', colors: [
+      {n:'Green',c:'#34C759',e:'💚',mix:'Blue + Yellow'}, {n:'Orange',c:'#FF9500',e:'🧡',mix:'Red + Yellow'}, {n:'Purple',c:'#AF52DE',e:'💜',mix:'Red + Blue'}]},
+  neutral: { title: '⚫ Neutral', colors: [
+      {n:'Black',c:'#000000',e:'🖤'}, {n:'White',c:'#FFFFFF',e:'🤍',t:'#333'}, {n:'Gray',c:'#8E8E93',e:'🩶'}, {n:'Brown',c:'#8B4513',e:'🤎'}]},
+  fancy: { title: '✨ Fancy Colors', colors: [
+      {n:'Pink',c:'#FF2D55',e:'💗'}, {n:'Gold',c:'#FFD700',e:'⭐'}, {n:'Silver',c:'#C0C0C0',e:'✨'}, {n:'Cyan',c:'#00BCD4',e:'🩵'},
+      {n:'Lime',c:'#8BC34A',e:'🍋'}, {n:'Magenta',c:'#E91E63',e:'🌺'}, {n:'Maroon',c:'#800000',e:'🍷'}, {n:'Navy',c:'#001F54',e:'🌌'},
+      {n:'Teal',c:'#008080',e:'🦚'}, {n:'Indigo',c:'#3F51B5',e:'🔮'}, {n:'Violet',c:'#9C27B0',e:'☂️'}, {n:'Lavender',c:'#CE93D8',e:'💐'},
+      {n:'Peach',c:'#FFCBA4',e:'🍑',t:'#333'}, {n:'Coral',c:'#FF6F61',e:'🪸'}, {n:'Turquoise',c:'#40E0D0',e:'🌊'}]}
 };
 
 const animals = [
-  {n:'Cat',e:'🐱'}, {n:'Dog',e:'🐶'}, {n:'Lion',e:'🦁'}, {n:'Elephant',e:'🐘'}, 
-  {n:'Monkey',e:'🐒'}, {n:'Tiger',e:'🐯'}, {n:'Zebra',e:'🦓'}, {n:'Panda',e:'🐼'}, {n:'Fish',e:'🐟'},
-  {n:'Cow',e:'🐮'}, {n:'Horse',e:'🐴'}, {n:'Chicken',e:'🐔'}, {n:'Duck',e:'🦆'}, {n:'Sheep',e:'🐑'}, 
-  {n:'Pig',e:'🐷'}, {n:'Goat',e:'🐐'}, {n:'Rabbit',e:'🐰'}, {n:'Bear',e:'🐻'},
-  {n:'Giraffe',e:'🦒'}, {n:'Hippo',e:'🦛'}, {n:'Crocodile',e:'🐊'}, {n:'Snake',e:'🐍'}, 
-  {n:'Turtle',e:'🐢'}, {n:'Frog',e:'🐸'}, {n:'Mouse',e:'🐭'},
-  {n:'Parrot',e:'🦜'}, {n:'Owl',e:'🦉'}, {n:'Penguin',e:'🐧'}, {n:'Eagle',e:'🦅'}, 
-  {n:'Peacock',e:'🦚'}, {n:'Flamingo',e:'🦩'}, {n:'Bee',e:'🐝'}, {n:'Butterfly',e:'🦋'},
+  {n:'Cat',e:'🐱'}, {n:'Dog',e:'🐶'}, {n:'Lion',e:'🦁'}, {n:'Elephant',e:'🐘'}, {n:'Monkey',e:'🐒'}, {n:'Tiger',e:'🐯'}, {n:'Zebra',e:'🦓'}, {n:'Panda',e:'🐼'}, {n:'Fish',e:'🐟'},
+  {n:'Cow',e:'🐮'}, {n:'Horse',e:'🐴'}, {n:'Chicken',e:'🐔'}, {n:'Duck',e:'🦆'}, {n:'Sheep',e:'🐑'}, {n:'Pig',e:'🐷'}, {n:'Goat',e:'🐐'}, {n:'Rabbit',e:'🐰'}, {n:'Bear',e:'🐻'},
+  {n:'Giraffe',e:'🦒'}, {n:'Hippo',e:'🦛'}, {n:'Crocodile',e:'🐊'}, {n:'Snake',e:'🐍'}, {n:'Turtle',e:'🐢'}, {n:'Frog',e:'🐸'}, {n:'Mouse',e:'🐭'},
+  {n:'Parrot',e:'🦜'}, {n:'Owl',e:'🦉'}, {n:'Penguin',e:'🐧'}, {n:'Eagle',e:'🦅'}, {n:'Peacock',e:'🦚'}, {n:'Flamingo',e:'🦩'}, {n:'Bee',e:'🐝'}, {n:'Butterfly',e:'🦋'},
   {n:'Whale',e:'🐳'}, {n:'Dolphin',e:'🐬'}, {n:'Octopus',e:'🐙'}
 ];
 
 let count=parseInt(localStorage.getItem('yaraCount')||'0');
 document.getElementById('learnCount').innerText=count;
-
-function speak(t){ 
-  const u = new SpeechSynthesisUtterance(t);
-  u.rate=0.8; u.pitch=1.1;
-  speechSynthesis.speak(u);
-  count++; localStorage.setItem('yaraCount',count);
-  document.getElementById('learnCount').innerText=count;
-}
-
+function speak(t){ const u=new SpeechSynthesisUtterance(t); u.rate=0.75; u.pitch=1.1; speechSynthesis.speak(u); count++; localStorage.setItem('yaraCount',count); document.getElementById('learnCount').innerText=count; }
 function showPage(id, btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-  speak(id==='abc'?'Alphabet':id==='num'?'Numbers one to one hundred':id==='color'?'Colors: Primary and Secondary':'Animals');
+  document.getElementById(id).classList.add('active'); btn.classList.add('active');
+  speak(id==='words'?'Two and three letter words':id);
 }
 
-document.getElementById('abcGrid').innerHTML = abcData.map(i=>`
-  <div class="card" onclick="speak('${i.l} is for ${i.w}')">
-    <div class="emoji">${i.e}</div><div class="letter">${i.l}</div><div class="word">${i.w}</div>
-  </div>
-`).join('');
+document.getElementById('abcGrid').innerHTML = abcData.map(i=>`<div class="card" onclick="speak('${i.l} is for ${i.w}')"><div class="emoji">${i.e}</div><div class="letter">${i.l}</div><div class="word">${i.w}</div></div>`).join('');
 
-const numbersToShow = [...Array(20).keys()].map(i=>i+1).concat([30,40,50,60,70,80,90,100]);
-document.getElementById('numGrid').innerHTML = numbersToShow.map(n=>{
-  let dots = n<=10 ? '●'.repeat(n) : n<=20 ? '●'.repeat(10)+' + '+(n-10) : n===100 ? '🎉🎉🎉' : '🔟 x '+(n/10);
-  let cls = n===100 ? 'card number-card hundred' : 'card number-card';
-  let label = n===100 ? 'ONE HUNDRED!' : n+' '+(n===1?'apple':'apples');
-  return `<div class="${cls}" onclick="speak('${n===100?'One hundred! You are a star!':n}')">
-    <div class="letter">${n}</div><div class="dots">${dots}</div><div class="word">${label}</div>
-  </div>`;
+const numbersToShow=[...Array(20).keys()].map(i=>i+1).concat([30,40,50,60,70,80,90,100]);
+document.getElementById('numGrid').innerHTML=numbersToShow.map(n=>{
+  let dots=n<=10?'●'.repeat(n):n<=20?'●'.repeat(10)+' + '+(n-10):n===100?'🎉🎉🎉':'🔟 x '+(n/10);
+  let cls=n===100?'card number-card hundred':'card number-card';
+  let label=n===100?'ONE HUNDRED!':n+' '+(n===1?'apple':'apples');
+  return `<div class="${cls}" onclick="speak('${n===100?'One hundred! You are a star!':n}')"><div class="letter">${n}</div><div class="dots">${dots}</div><div class="word">${label}</div></div>`;
 }).join('');
 
-// COLORS GROUPED
-let colorHTML = '';
-for(let groupKey in colorGroups){
-  let group = colorGroups[groupKey];
-  colorHTML += `<div class="color-section ${groupKey}"><h3>${group.title}</h3><div class="grid">`;
-  group.colors.forEach(c=>{
-    let mix = c.mix ? `<div class="mix-hint">${c.mix}</div>` : '';
-    colorHTML += `<div class="card color-card" style="background:${c.c}; color:${c.t||'white'}; border-bottom-color:${c.c}" onclick="speak('${c.mix? c.n + ', ' + c.mix : c.n}')">
-      <span class="emoji">${c.e}</span>${c.n}${mix}
-    </div>`;
-  });
-  colorHTML += `</div></div>`;
-}
-document.getElementById('color').innerHTML = colorHTML;
+// WORDS PAGE
+let wordsHTML=`<div class="word-section two"><h3>✌️ 2-Letter Words - Start here!</h3><div class="grid">`;
+twoLetterWords.forEach(w=>{
+  wordsHTML+=`<div class="card word-card" onclick="speak('${w.w.split('').join(' ')} .. ${w.w}')">
+    <div class="emoji">${w.e}</div><div class="letter">${w.w}</div><div class="sound">${w.s}</div>
+  </div>`;
+});
+wordsHTML+=`</div></div><div class="word-section three"><h3>📚 3-Letter Words - You can read!</h3><div class="grid">`;
+threeLetterWords.forEach(w=>{
+  wordsHTML+=`<div class="card word-card" onclick="speak('${w.w.split('').join(' ')} .. ${w.w}')">
+    <div class="emoji">${w.e}</div><div class="letter">${w.w}</div><div class="sound">${w.s}</div>
+  </div>`;
+});
+wordsHTML+=`</div></div>`;
+document.getElementById('words').innerHTML=wordsHTML;
 
-document.getElementById('animalGrid').innerHTML = animals.map(a=>`
-  <div class="card" onclick="speak('${a.n}')">
-    <div class="emoji">${a.e}</div><div class="word">${a.n}</div>
-  </div>
-`).join('');
+// COLORS
+let colorHTML=''; for(let k in colorGroups){ let g=colorGroups[k]; colorHTML+=`<div class="color-section ${k}"><h3>${g.title}</h3><div class="grid">`; g.colors.forEach(c=>{ let mix=c.mix?`<div class="mix-hint">${c.mix}</div>`:''; colorHTML+=`<div class="card color-card" style="background:${c.c};color:${c.t||'white'};border-bottom-color:${c.c}" onclick="speak('${c.mix?c.n+', '+c.mix:c.n}')"><span class="emoji">${c.e}</span>${c.n}${mix}</div>`; }); colorHTML+=`</div></div>`; }
+document.getElementById('color').innerHTML=colorHTML;
+
+document.getElementById('animalGrid').innerHTML=animals.map(a=>`<div class="card" onclick="speak('${a.n}')"><div class="emoji">${a.e}</div><div class="word">${a.n}</div></div>`).join('');
 </script>
 </body>
 </html>
