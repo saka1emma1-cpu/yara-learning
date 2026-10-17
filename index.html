@@ -20,15 +20,14 @@
   .card:active{transform:scale(.95)}
   .card .emoji{font-size:42px} .card .letter{font-size:26px;font-weight:900;color:#333}
   .card .word{font-size:13px;color:#666;margin-top:4px;font-weight:700}
-  .word-card .letter{letter-spacing:3px}
+  .word-card .letter{letter-spacing:2px}
   .word-card .sound{font-size:11px;color:#FF6B6B;font-weight:800;margin-top:4px}
   .number-card .dots{font-size:16px;margin-top:6px;word-break:break-all}
   .color-card{height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;font-weight:900;text-shadow:0 1px 3px #0008;font-size:14px;gap:4px}
   .color-card span.emoji{font-size:22px;text-shadow:none}
   .color-section{margin-bottom:24px}
   .color-section h3{font-size:15px;margin-bottom:10px;padding:8px 14px;border-radius:20px;display:inline-block;color:white}
-  .primary h3{background:#FF3B30} .secondary h3{background:#34C759}
-  .neutral h3{background:#8E8E93} .fancy h3{background:#AF52DE}
+  .primary h3{background:#FF3B30} .secondary h3{background:#34C759} .neutral h3{background:#8E8E93} .fancy h3{background:#AF52DE}
   .word-section{margin-bottom:24px}
   .word-section h3{font-size:15px;margin-bottom:10px;padding:8px 14px;border-radius:20px;display:inline-block;color:white}
   .two h3{background:#4ECDC4} .three h3{background:#FF6B6B}
@@ -73,25 +72,25 @@ const abcData = [
   {l:'Y',e:'🟡',w:'Yellow'},{l:'Z',e:'🦓',w:'Zebra'}
 ];
 
-// FIXED 2-LETTER WORDS - with correct pronunciation
+// FIXED LIST - short and clear
 const twoLetterWords = [
-  {w:'AT',e:'🎩',s:'a - t', say:'at'}, {w:'IN',e:'📥',s:'i - n', say:'in'}, {w:'ON',e:'🔛',s:'o - n', say:'on'},
-  {w:'UP',e:'⬆️',s:'u - p', say:'up'}, {w:'IT',e:'👉',s:'i - t', say:'it'}, {w:'IS',e:'✅',s:'i - s', say:'is'},
-  {w:'TO',e:'➡️',s:'t - o', say:'to'}, {w:'GO',e:'🏃',s:'g - o', say:'go'}, {w:'MY',e:'🙋',s:'m - y', say:'my'},
-  {w:'WE',e:'👫',s:'w - e', say:'we'}, {w:'BE',e:'🐝',s:'b - e', say:'bee'}, {w:'SO',e:'😊',s:'s - o', say:'so'},
-  {w:'AN',e:'🍎',s:'a - n', say:'an'}, {w:'AM',e:'🕐',s:'a - m', say:'am'}, {w:'ME',e:'😊',s:'m - e', say:'me'}
+  {w:'AT',e:'🎩',say:'at'}, {w:'IN',e:'📥',say:'in'}, {w:'ON',e:'🔛',say:'on'},
+  {w:'UP',e:'⬆️',say:'up'}, {w:'IT',e:'👉',say:'it'}, {w:'IS',e:'✅',say:'is'},
+  {w:'TO',e:'➡️',say:'to'}, {w:'GO',e:'🏃',say:'go'}, {w:'MY',e:'🙋',say:'my'},
+  {w:'WE',e:'👫',say:'we'}, {w:'BE',e:'🐝',say:'bee'}, {w:'SO',e:'😊',say:'so'},
+  {w:'AN',e:'🍎',say:'an'}, {w:'AM',e:'🕐',say:'am'}, {w:'ME',e:'😊',say:'me'}
 ];
 const threeLetterWords = [
-  {w:'CAT',e:'🐱',s:'c - a - t', say:'cat'}, {w:'DOG',e:'🐶',s:'d - o - g', say:'dog'}, {w:'BAT',e:'🦇',s:'b - a - t', say:'bat'},
-  {w:'SUN',e:'☀️',s:'s - u - n', say:'sun'}, {w:'HAT',e:'🎩',s:'h - a - t', say:'hat'}, {w:'MAP',e:'🗺️',s:'m - a - p', say:'map'},
-  {w:'CUP',e:'☕',s:'c - u - p', say:'cup'}, {w:'BAG',e:'👜',s:'b - a - g', say:'bag'}, {w:'BED',e:'🛏️',s:'b - e - d', say:'bed'},
-  {w:'BOX',e:'📦',s:'b - o - x', say:'box'}, {w:'CAR',e:'🚗',s:'c - a - r', say:'car'}, {w:'BUS',e:'🚌',s:'b - u - s', say:'bus'},
-  {w:'EGG',e:'🥚',s:'e - g - g', say:'egg'}, {w:'FOX',e:'🦊',s:'f - o - x', say:'fox'}, {w:'PIG',e:'🐷',s:'p - i - g', say:'pig'},
-  {w:'COW',e:'🐮',s:'c - o - w', say:'cow'}, {w:'BEE',e:'🐝',s:'b - e - e', say:'bee'}, {w:'ANT',e:'🐜',s:'a - n - t', say:'ant'},
-  {w:'TOP',e:'🌀',s:'t - o - p', say:'top'}, {w:'PEN',e:'🖊️',s:'p - e - n', say:'pen'}, {w:'RED',e:'🔴',s:'r - e - d', say:'red'},
-  {w:'LEG',e:'🦵',s:'l - e - g', say:'leg'}, {w:'EYE',e:'👁️',s:'e - y - e', say:'eye'}, {w:'EAR',e:'👂',s:'e - a - r', say:'ear'},
-  {w:'JAM',e:'🍓',s:'j - a - m', say:'jam'}, {w:'ZIP',e:'🤐',s:'z - i - p', say:'zip'}, {w:'VAN',e:'🚐',s:'v - a - n', say:'van'},
-  {w:'MOM',e:'👩',s:'m - o - m', say:'mom'}, {w:'DAD',e:'👨',s:'d - a - d', say:'dad'}, {w:'BOY',e:'👦',s:'b - o - y', say:'boy'}
+  {w:'CAT',e:'🐱',say:'cat'}, {w:'DOG',e:'🐶',say:'dog'}, {w:'BAT',e:'🦇',say:'bat'},
+  {w:'SUN',e:'☀️',say:'sun'}, {w:'HAT',e:'🎩',say:'hat'}, {w:'MAP',e:'🗺️',say:'map'},
+  {w:'CUP',e:'☕',say:'cup'}, {w:'BAG',e:'👜',say:'bag'}, {w:'BED',e:'🛏️',say:'bed'},
+  {w:'BOX',e:'📦',say:'box'}, {w:'CAR',e:'🚗',say:'car'}, {w:'BUS',e:'🚌',say:'bus'},
+  {w:'EGG',e:'🥚',say:'egg'}, {w:'FOX',e:'🦊',say:'fox'}, {w:'PIG',e:'🐷',say:'pig'},
+  {w:'COW',e:'🐮',say:'cow'}, {w:'BEE',e:'🐝',say:'bee'}, {w:'ANT',e:'🐜',say:'ant'},
+  {w:'TOP',e:'🌀',say:'top'}, {w:'PEN',e:'🖊️',say:'pen'}, {w:'RED',e:'🔴',say:'red'},
+  {w:'LEG',e:'🦵',say:'leg'}, {w:'EYE',e:'👁️',say:'eye'}, {w:'EAR',e:'👂',say:'ear'},
+  {w:'JAM',e:'🍓',say:'jam'}, {w:'ZIP',e:'🤐',say:'zip'}, {w:'VAN',e:'🚐',say:'van'},
+  {w:'MOM',e:'👩',say:'mom'}, {w:'DAD',e:'👨',say:'dad'}, {w:'BOY',e:'👦',say:'boy'}
 ];
 
 const colorGroups = {
@@ -114,21 +113,31 @@ document.getElementById('learnCount').innerText=count;
 function speakText(t){
   speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(t);
-  u.rate=0.8; u.pitch=1.1;
+  u.rate=0.85; u.pitch=1.1; u.lang='en-US';
   speechSynthesis.speak(u);
   count++; localStorage.setItem('yaraCount',count);
   document.getElementById('learnCount').innerText=count;
 }
 
-// NEW FIXED SPEAK FOR WORDS - pronounces correctly
+// --- NEW CORRECT PRONUNCIATION LOGIC ---
 function speakWord(obj){
   speechSynthesis.cancel();
-  const spell = obj.s.split(' ').join(', ');
-  // Say: "A, T... says AT"
-  const text = `${spell}. The word is, ${obj.say}. ${obj.say} as in, ${obj.say}`;
-  const u=new SpeechSynthesisUtterance(text);
-  u.rate=0.65; u.pitch=1.15;
-  speechSynthesis.speak(u);
+
+  // Step 1: Spell letters slowly
+  const letters = obj.w.split('').join(' . ');
+  const u1 = new SpeechSynthesisUtterance(letters);
+  u1.rate=0.6; u1.pitch=1.2; u1.lang='en-US';
+  
+  // Step 2: Say the word clearly after a pause
+  u1.onend = () => {
+    setTimeout(()=>{
+      const u2 = new SpeechSynthesisUtterance(obj.say);
+      u2.rate=0.7; u2.pitch=1.1; u2.lang='en-US';
+      speechSynthesis.speak(u2);
+    }, 400);
+  };
+  speechSynthesis.speak(u1);
+
   count++; localStorage.setItem('yaraCount',count);
   document.getElementById('learnCount').innerText=count;
 }
@@ -140,7 +149,6 @@ function showPage(id, btn){
 }
 
 document.getElementById('abcGrid').innerHTML = abcData.map(i=>`<div class="card" onclick="speakText('${i.l} is for ${i.w}')"><div class="emoji">${i.e}</div><div class="letter">${i.l}</div><div class="word">${i.w}</div></div>`).join('');
-
 const numbersToShow=[...Array(20).keys()].map(i=>i+1).concat([30,40,50,60,70,80,90,100]);
 document.getElementById('numGrid').innerHTML=numbersToShow.map(n=>{
   let dots=n<=10?'●'.repeat(n):n<=20?'●'.repeat(10)+' + '+(n-10):n===100?'🎉🎉🎉':'🔟 x '+(n/10);
@@ -151,22 +159,17 @@ document.getElementById('numGrid').innerHTML=numbersToShow.map(n=>{
 
 let wordsHTML=`<div class="word-section two"><h3>✌️ 2-Letter Words - Start here!</h3><div class="grid">`;
 twoLetterWords.forEach(o=>{
-  wordsHTML+=`<div class="card word-card" onclick='speakWord(${JSON.stringify(o)})'>
-    <div class="emoji">${o.e}</div><div class="letter">${o.w}</div><div class="sound">${o.s}</div>
-  </div>`;
+  wordsHTML+=`<div class="card word-card" onclick='speakWord(${JSON.stringify(o)})'><div class="emoji">${o.e}</div><div class="letter">${o.w}</div><div class="sound">${o.w.split('').join(' - ').toLowerCase()}</div></div>`;
 });
 wordsHTML+=`</div></div><div class="word-section three"><h3>📚 3-Letter Words - You can read!</h3><div class="grid">`;
 threeLetterWords.forEach(o=>{
-  wordsHTML+=`<div class="card word-card" onclick='speakWord(${JSON.stringify(o)})'>
-    <div class="emoji">${o.e}</div><div class="letter">${o.w}</div><div class="sound">${o.s}</div>
-  </div>`;
+  wordsHTML+=`<div class="card word-card" onclick='speakWord(${JSON.stringify(o)})'><div class="emoji">${o.e}</div><div class="letter">${o.w}</div><div class="sound">${o.w.split('').join(' - ').toLowerCase()}</div></div>`;
 });
 wordsHTML+=`</div></div>`;
 document.getElementById('words').innerHTML=wordsHTML;
 
 let colorHTML=''; for(let k in colorGroups){ let g=colorGroups[k]; colorHTML+=`<div class="color-section ${k}"><h3>${g.title}</h3><div class="grid">`; g.colors.forEach(c=>{ let mix=c.mix?`<div class="mix-hint">${c.mix}</div>`:''; colorHTML+=`<div class="card color-card" style="background:${c.c};color:${c.t||'white'};border-bottom-color:${c.c}" onclick="speakText('${c.n}')"><span class="emoji">${c.e}</span>${c.n}${mix}</div>`; }); colorHTML+=`</div></div>`; }
 document.getElementById('color').innerHTML=colorHTML;
-
 document.getElementById('animalGrid').innerHTML=animals.map(a=>`<div class="card" onclick="speakText('${a.n}')"><div class="emoji">${a.e}</div><div class="word">${a.n}</div></div>`).join('');
 </script>
 </body>
