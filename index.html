@@ -3,38 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yara Kids - ABC & 123</title>
+<title>Yara Kids - Mr. Yara Teacher</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',system-ui}
   body{background:#FFF8E7;min-height:100vh}
   header{background:#FF6B6B;color:white;padding:16px;text-align:center;position:sticky;top:0;z-index:10}
   header h1{font-size:28px}
-  .voice-box{margin:10px 16px;background:#fff3cd;padding:12px;border-radius:12px;border:2px solid #FFCC00}
-  .voice-box b{font-size:13px}
-  .voice-box p{font-size:11px;margin-top:4px}
-  .tabs{display:flex;gap:8px;padding:12px;overflow:auto;background:white;box-shadow:0 2px 8px #0001;position:sticky;top:98px;z-index:9}
+  .voice-box{margin:10px 16px;background:#fff3cd;padding:12px;border-radius:12px;border:2px solid #FFCC00;text-align:center}
+  .voice-box button{margin-top:8px;padding:10px 18px;border-radius:20px;border:none;background:#FF6B6B;color:white;font-weight:800;font-size:14px}
+  .tabs{display:flex;gap:8px;padding:12px;overflow:auto;background:white;box-shadow:0 2px 8px #0001;position:sticky;top:108px;z-index:9}
   .tab{padding:10px 14px;border-radius:20px;border:2px solid #eee;background:white;font-weight:800;white-space:nowrap;cursor:pointer;font-size:13px}
   .tab.active{background:#FF6B6B;color:white;border-color:#FF6B6B}
   .page{padding:16px;display:none} .page.active{display:block}
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   .card{background:white;border-radius:20px;padding:18px 10px;text-align:center;box-shadow:0 4px 12px #0001;cursor:pointer;border-bottom:5px solid #eee}
   .card:active{transform:scale(.95)}
-  .card .emoji{font-size:42px} .card .letter{font-size:26px;font-weight:900;color:#333}
-  .word-card .sound{font-size:11px;color:#FF6B6B;font-weight:800}
-  .parent{margin:20px 16px;background:white;padding:14px;border-radius:16px;text-align:center}
-  .speak-btn{margin:16px auto;display:block;background:#4ECDC4;color:white;border:none;padding:12px 24px;border-radius:30px;font-weight:800}
+  .card .emoji{font-size:42px} .card .letter{font-size:22px;font-weight:900;color:#333}
+  .card .word{font-size:12px;color:#666;margin-top:4px;font-weight:700}
+  .word-card .sound{font-size:10px;color:#FF6B6B;font-weight:800;margin-top:4px}
+  .color-card{height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;font-weight:900;font-size:13px}
+  .section{margin-bottom:22px} .section h3{font-size:14px;margin-bottom:8px;padding:6px 12px;border-radius:20px;display:inline-block;color:white}
+  .two h3{background:#4ECDC4} .three h3{background:#FF6B6B}
+  .parent{margin:20px 16px;background:white;padding:14px;border-radius:16px;text-align:center;font-weight:700}
 </style>
 </head>
 <body>
 <header>
   <h1>🌈 Yara Kids</h1>
-  <p>👨‍🏫 Mr. Yara - Your Teacher</p>
+  <p>👨‍🏫 Mr. Yara - Male Teacher - Tap to Learn</p>
 </header>
 
 <div class="voice-box">
-  <b>👨‍🏫 Teacher Voice: Male (Deep Mode)</b>
-  <p>If still female: Go to Phone Settings → Language → Text-to-Speech → Google TTS ⚙️ → Install voice data → English UK → Tap Male voice (Voice II or III) → Download. Then reload.</p>
-  <button onclick="testVoice()" style="margin-top:8px;padding:8px 16px;border-radius:20px;border:none;background:#FF6B6B;color:white;font-weight:800">Test Teacher Voice</button>
+  <div><b>👨‍🏫 Teacher: Mr. Yara (Male Deep Voice)</b><br><small>Selected UK Voice II = Male. Teaching mode ON</small></div>
+  <button onclick="testVoice()">🔊 Test Mr. Yara Voice</button>
 </div>
 
 <div class="tabs">
@@ -51,76 +52,73 @@
 <div id="color" class="page"></div>
 <div id="animal" class="page"><div class="grid" id="animalGrid"></div></div>
 
-<div class="parent">⭐ Today: <span id="learnCount">0</span> words learned</div>
+<div class="parent">⭐ Today: <span id="learnCount">0</span> words mastered</div>
 
 <script>
-const abcData = [{l:'A',e:'🍎',w:'Apple'},{l:'B',e:'⚽',w:'Ball'},{l:'C',e:'🐱',w:'Cat'},{l:'D',e:'🐶',w:'Dog'},{l:'E',e:'🐘',w:'Elephant'},{l:'F',e:'🐟',w:'Fish'},{l:'G',e:'🍇',w:'Grapes'},{l:'H',e:'🏠',w:'House'},{l:'I',e:'🍦',w:'Ice Cream'},{l:'J',e:'🧃',w:'Juice'},{l:'K',e:'🪁',w:'Kite'},{l:'L',e:'🦁',w:'Lion'},{l:'M',e:'🐒',w:'Monkey'},{l:'N',e:'🥜',w:'Nut'},{l:'O',e:'🍊',w:'Orange'},{l:'P',e:'🐼',w:'Panda'},{l:'Q',e:'👑',w:'Queen'},{l:'R',e:'🌈',w:'Rainbow'},{l:'S',e:'☀️',w:'Sun'},{l:'T',e:'🐯',w:'Tiger'},{l:'U',e:'☂️',w:'Umbrella'},{l:'V',e:'🎻',w:'Violin'},{l:'W',e:'🐳',w:'Whale'},{l:'X',e:'🎄',w:'Xmas Tree'},{l:'Y',e:'🟡',w:'Yellow'},{l:'Z',e:'🦓',w:'Zebra'}];
-const twoLetterWords = [{w:'AT',e:'🎩',say:'at'},{w:'IN',e:'📥',say:'in'},{w:'ON',e:'🔛',say:'on'},{w:'UP',e:'⬆️',say:'up'},{w:'IT',e:'👉',say:'it'},{w:'IS',e:'✅',say:'is'},{w:'TO',e:'➡️',say:'to'},{w:'GO',e:'🏃',say:'go'},{w:'MY',e:'🙋',say:'my'},{w:'WE',e:'👫',say:'we'},{w:'BE',e:'🐝',say:'bee'},{w:'SO',e:'😊',say:'so'},{w:'AN',e:'🍎',say:'an'},{w:'AM',e:'🕐',say:'am'},{w:'ME',e:'😊',say:'me'}];
-const threeLetterWords = [{w:'CAT',e:'🐱',say:'cat'},{w:'DOG',e:'🐶',say:'dog'},{w:'BAT',e:'🦇',say:'bat'},{w:'SUN',e:'☀️',say:'sun'},{w:'HAT',e:'🎩',say:'hat'},{w:'MAP',e:'🗺️',say:'map'},{w:'CUP',e:'☕',say:'cup'},{w:'BAG',e:'👜',say:'bag'},{w:'BED',e:'🛏️',say:'bed'},{w:'BOX',e:'📦',say:'box'},{w:'CAR',e:'🚗',say:'car'},{w:'BUS',e:'🚌',say:'bus'},{w:'EGG',e:'🥚',say:'egg'},{w:'FOX',e:'🦊',say:'fox'},{w:'PIG',e:'🐷',say:'pig'},{w:'COW',e:'🐮',say:'cow'},{w:'BEE',e:'🐝',say:'bee'},{w:'ANT',e:'🐜',say:'ant'},{w:'TOP',e:'🌀',say:'top'},{w:'PEN',e:'🖊️',say:'pen'},{w:'RED',e:'🔴',say:'red'}];
+const abcData=[{l:'A',e:'🍎',w:'Apple'},{l:'B',e:'⚽',w:'Ball'},{l:'C',e:'🐱',w:'Cat'},{l:'D',e:'🐶',w:'Dog'},{l:'E',e:'🐘',w:'Elephant'},{l:'F',e:'🐟',w:'Fish'},{l:'G',e:'🍇',w:'Grapes'},{l:'H',e:'🏠',w:'House'},{l:'I',e:'🍦',w:'Ice Cream'},{l:'J',e:'🧃',w:'Juice'},{l:'K',e:'🪁',w:'Kite'},{l:'L',e:'🦁',w:'Lion'},{l:'M',e:'🐒',w:'Monkey'},{l:'N',e:'🥜',w:'Nut'},{l:'O',e:'🍊',w:'Orange'},{l:'P',e:'🐼',w:'Panda'},{l:'Q',e:'👑',w:'Queen'},{l:'R',e:'🌈',w:'Rainbow'},{l:'S',e:'☀️',w:'Sun'},{l:'T',e:'🐯',w:'Tiger'},{l:'U',e:'☂️',w:'Umbrella'},{l:'V',e:'🎻',w:'Violin'},{l:'W',e:'🐳',w:'Whale'},{l:'X',e:'🎄',w:'Xmas Tree'},{l:'Y',e:'🟡',w:'Yellow'},{l:'Z',e:'🦓',w:'Zebra'}];
+const twoLetterWords=[{w:'AT',e:'🎩',say:'at',use:'The cat is AT home'},{w:'IN',e:'📥',say:'in',use:'The book is IN the bag'},{w:'ON',e:'🔛',say:'on',use:'The cup is ON the table'},{w:'UP',e:'⬆️',say:'up',use:'Look UP at the sky'},{w:'IT',e:'👉',say:'it',use:'IT is a dog'},{w:'IS',e:'✅',say:'is',use:'This IS my ball'},{w:'TO',e:'➡️',say:'to',use:'Go TO school'},{w:'GO',e:'🏃',say:'go',use:'Let us GO'},{w:'MY',e:'🙋',say:'my',use:'This is MY toy'},{w:'WE',e:'👫',say:'we',use:'WE are friends'}];
+const threeLetterWords=[{w:'CAT',e:'🐱',say:'cat',use:'The CAT is sleeping'},{w:'DOG',e:'🐶',say:'dog',use:'The DOG can run'},{w:'SUN',e:'☀️',say:'sun',use:'The SUN is bright'},{w:'HAT',e:'🎩',say:'hat',use:'Wear your HAT'},{w:'MAP',e:'🗺️',say:'map',use:'Look at the MAP'},{w:'CUP',e:'☕',say:'cup',use:'Drink from the CUP'},{w:'BAG',e:'👜',say:'bag',use:'My BAG is red'},{w:'BED',e:'🛏️',say:'bed',use:'Sleep in your BED'},{w:'CAR',e:'🚗',say:'car',use:'The CAR is fast'},{w:'BUS',e:'🚌',say:'bus',use:'Ride the BUS'},{w:'RED',e:'🔴',say:'red',use:'The apple is RED'},{w:'EYE',e:'👁️',say:'eye',use:'I have two EYE'},{w:'MOM',e:'👩',say:'mom',use:'I love MOM'},{w:'DAD',e:'👨',say:'dad',use:'I love DAD'}];
+const colors=[{n:'Red',c:'#FF3B30',e:'❤️'},{n:'Blue',c:'#007AFF',e:'💙'},{n:'Yellow',c:'#FFCC00',e:'💛'},{n:'Green',c:'#34C759',e:'💚'},{n:'Orange',c:'#FF9500',e:'🧡'},{n:'Purple',c:'#AF52DE',e:'💜'},{n:'Black',c:'#000',e:'🖤'},{n:'White',c:'#fff',e:'🤍',t:'#333'},{n:'Pink',c:'#FF2D55',e:'💗'}];
+const animals=[{n:'Cat',e:'🐱'},{n:'Dog',e:'🐶'},{n:'Lion',e:'🦁'},{n:'Elephant',e:'🐘'},{n:'Tiger',e:'🐯'},{n:'Zebra',e:'🦓'},{n:'Panda',e:'🐼'},{n:'Fish',e:'🐟'},{n:'Cow',e:'🐮'},{n:'Horse',e:'🐴'},{n:'Chicken',e:'🐔'},{n:'Duck',e:'🦆'}];
 
-let teacherVoice = null;
+let count=parseInt(localStorage.getItem('yaraCount')||'0'); document.getElementById('learnCount').innerText=count;
+let teacherVoice=null;
 function initVoice(){
-  const voices = speechSynthesis.getVoices();
-  if(!voices.length){ setTimeout(initVoice,500); return; }
-  // Try to find ANY male
-  const male = voices.find(v=>/male|david|mark|alex|guy/i.test(v.name)) || voices.find(v=>v.lang==='en-GB') || voices[0];
-  teacherVoice = male;
-  console.log('Teacher voice:', male.name);
+  let v=speechSynthesis.getVoices();
+  if(!v.length){setTimeout(initVoice,400);return;}
+  // Find male - prefer en-GB Voice II which you downloaded
+  teacherVoice = v.find(x=>x.name.toLowerCase().includes('english united kingdom') && x.name.toLowerCase().includes('voice ii')) ||
+                v.find(x=>/voice ii|voice iii|male|guy|david|mark/i.test(x.name)) ||
+                v.find(x=>x.lang==='en-GB') || v[0];
 }
-speechSynthesis.onvoiceschanged = initVoice;
-initVoice();
+speechSynthesis.onvoiceschanged=initVoice; initVoice();
 
 function testVoice(){
   speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance("Hello! I am Mister Yara, your teacher. Let's learn together. Repeat after me. A, T, at!");
-  if(teacherVoice) u.voice = teacherVoice;
-  u.rate = 0.7; // slower = more teacher-like
-  u.pitch = 0.5; // 0.5 = DEEP MALE even if base voice is female
-  u.volume = 1;
-  u.lang = 'en-US';
+  let u=new SpeechSynthesisUtterance("Hello! I am Mister Yara, your teacher. Listen carefully. Repeat after me. A, T, at! You can do it!");
+  if(teacherVoice) u.voice=teacherVoice;
+  u.rate=0.65; u.pitch=0.4; u.volume=1; u.lang='en-GB';
   speechSynthesis.speak(u);
 }
-
 function speakText(t){
   speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(t);
-  if(teacherVoice) u.voice = teacherVoice;
-  u.rate=0.75; u.pitch=0.55; u.lang='en-US'; // DEEP MALE EFFECT
+  let u=new SpeechSynthesisUtterance(t);
+  if(teacherVoice) u.voice=teacherVoice;
+  u.rate=0.68; u.pitch=0.45; u.lang='en-GB';
   speechSynthesis.speak(u);
+  count++; localStorage.setItem('yaraCount',count); document.getElementById('learnCount').innerText=count;
 }
-
 function speakWord(obj){
   speechSynthesis.cancel();
-  const letters = obj.w.split('').join(' . ');
-  const u1 = new SpeechSynthesisUtterance(letters);
-  if(teacherVoice) u1.voice = teacherVoice;
-  u1.rate=0.5; u1.pitch=0.5; u1.lang='en-US';
-  u1.onend = ()=>{
+  let u1=new SpeechSynthesisUtterance(obj.w.split('').join(' . '));
+  if(teacherVoice) u1.voice=teacherVoice;
+  u1.rate=0.45; u1.pitch=0.4; u1.lang='en-GB';
+  u1.onend=()=>{
     setTimeout(()=>{
-      const u2 = new SpeechSynthesisUtterance(`The word is ${obj.say}. Say it with me, ${obj.say}`);
-      if(teacherVoice) u2.voice = teacherVoice;
-      u2.rate=0.65; u2.pitch=0.6; u2.lang='en-US';
+      let u2=new SpeechSynthesisUtterance(`The word is ${obj.say}. ${obj.use}. Now say it with me, ${obj.say}. Good job!`);
+      if(teacherVoice) u2.voice=teacherVoice;
+      u2.rate=0.62; u2.pitch=0.5; u2.lang='en-GB';
       speechSynthesis.speak(u2);
-    },300);
+    },350);
   };
   speechSynthesis.speak(u1);
+  count++; localStorage.setItem('yaraCount',count); document.getElementById('learnCount').innerText=count;
 }
-
-function showPage(id, btn){
+function showPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active'); btn.classList.add('active');
 }
-
-document.getElementById('abcGrid').innerHTML = abcData.map(i=>`<div class="card" onclick="speakText('${i.l} is for ${i.w}. ${i.w}')"><div class="emoji">${i.e}</div><div class="letter">${i.l}</div></div>`).join('');
-let wordsHTML=`<div class="grid">`;
-twoLetterWords.forEach(o=>{ wordsHTML+=`<div class="card" onclick='speakWord(${JSON.stringify(o)})'><div class="emoji">${o.e}</div><div class="letter">${o.w}</div><div class="sound">${o.w.split('').join(' - ')}</div></div>`; });
-threeLetterWords.forEach(o=>{ wordsHTML+=`<div class="card" onclick='speakWord(${JSON.stringify(o)})'><div class="emoji">${o.e}</div><div class="letter">${o.w}</div><div class="sound">${o.w.split('').join(' - ')}</div></div>`; });
-wordsHTML+=`</div>`;
-document.getElementById('words').innerHTML=wordsHTML;
-document.getElementById('numGrid').innerHTML=`<div class="card" onclick="speakText('One')"><div class="letter">1</div></div>`;
-document.getElementById('color').innerHTML=`<div class="card" onclick="speakText('Red')"><div class="letter">Red</div></div>`;
-document.getElementById('animalGrid').innerHTML=`<div class="card" onclick="speakText('Cat')"><div class="letter">Cat</div></div>`;
+document.getElementById('abcGrid').innerHTML=abcData.map(i=>`<div class="card" onclick="speakText('${i.l} is for ${i.w}. ${i.w}. Say ${i.w}')"><div class="emoji">${i.e}</div><div class="letter">${i.l}</div><div class="word">${i.w}</div></div>`).join('');
+document.getElementById('numGrid').innerHTML=[...Array(20).keys()].map(i=>i+1).concat([30,40,50,60,70,80,90,100]).map(n=>`<div class="card" onclick="speakText('${n}. Count ${n}')"><div class="letter">${n}</div></div>`).join('');
+let wHTML=`<div class="section two"><h3>✌️ 2-Letter - Start Here</h3><div class="grid">`;
+twoLetterWords.forEach(o=>{ wHTML+=`<div class="card" onclick='speakWord(${JSON.stringify(o)})'><div class="emoji">${o.e}</div><div class="letter">${o.w}</div><div class="sound">${o.w.split('').join(' - ').toLowerCase()}</div></div>`; });
+wHTML+=`</div></div><div class="section three"><h3>📚 3-Letter - You Can Read!</h3><div class="grid">`;
+threeLetterWords.forEach(o=>{ wHTML+=`<div class="card" onclick='speakWord(${JSON.stringify(o)})'><div class="emoji">${o.e}</div><div class="letter">${o.w}</div><div class="sound">${o.w.split('').join(' - ').toLowerCase()}</div></div>`; });
+wHTML+=`</div></div>`;
+document.getElementById('words').innerHTML=wHTML;
+document.getElementById('color').innerHTML=`<div class="grid">${colors.map(c=>`<div class="card color-card" style="background:${c.c};color:${c.t||'white'}" onclick="speakText('${c.n}. The color is ${c.n}')"><span class="emoji">${c.e}</span>${c.n}</div>`).join('')}</div>`;
+document.getElementById('animalGrid').innerHTML=animals.map(a=>`<div class="card" onclick="speakText('${a.n}. The ${a.n} says... This is a ${a.n}')"><div class="emoji">${a.e}</div><div class="word">${a.n}</div></div>`).join('');
 </script>
 </body>
 </html>
