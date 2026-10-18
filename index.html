@@ -4,50 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yara Kids - ABC & 123</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ff6b6b">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',system-ui}
   body{background:#FFF8E7;min-height:100vh}
   header{background:#FF6B6B;color:white;padding:16px;text-align:center;position:sticky;top:0;z-index:10}
-  header h1{font-size:28px} header p{opacity:.9;font-size:14px}
-  .tabs{display:flex;gap:8px;padding:12px;overflow:auto;background:white;box-shadow:0 2px 8px #0001;position:sticky;top:70px;z-index:9}
+  header h1{font-size:28px}
+  .voice-box{margin:10px 16px;background:#fff3cd;padding:12px;border-radius:12px;border:2px solid #FFCC00}
+  .voice-box b{font-size:13px}
+  .voice-box p{font-size:11px;margin-top:4px}
+  .tabs{display:flex;gap:8px;padding:12px;overflow:auto;background:white;box-shadow:0 2px 8px #0001;position:sticky;top:98px;z-index:9}
   .tab{padding:10px 14px;border-radius:20px;border:2px solid #eee;background:white;font-weight:800;white-space:nowrap;cursor:pointer;font-size:13px}
   .tab.active{background:#FF6B6B;color:white;border-color:#FF6B6B}
   .page{padding:16px;display:none} .page.active{display:block}
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  .card{background:white;border-radius:20px;padding:18px 10px;text-align:center;box-shadow:0 4px 12px #0001;cursor:pointer;transition:.2s;border-bottom:5px solid #eee}
+  .card{background:white;border-radius:20px;padding:18px 10px;text-align:center;box-shadow:0 4px 12px #0001;cursor:pointer;border-bottom:5px solid #eee}
   .card:active{transform:scale(.95)}
   .card .emoji{font-size:42px} .card .letter{font-size:26px;font-weight:900;color:#333}
-  .card .word{font-size:13px;color:#666;margin-top:4px;font-weight:700}
-  .word-card .letter{letter-spacing:2px}
-  .word-card .sound{font-size:11px;color:#FF6B6B;font-weight:800;margin-top:4px}
-  .voice-box{margin:10px 16px;background:white;padding:10px;border-radius:12px;display:flex;gap:8px;align-items:center}
-  .voice-box select{flex:1;padding:8px;border-radius:8px;border:2px solid #eee;font-weight:700}
-  .voice-box button{padding:8px 12px;border-radius:8px;border:none;background:#FF6B6B;color:white;font-weight:800}
-  .number-card .dots{font-size:16px;margin-top:6px;word-break:break-all}
-  .color-card{height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;font-weight:900;text-shadow:0 1px 3px #0008;font-size:14px;gap:4px}
-  .color-card span.emoji{font-size:22px;text-shadow:none}
-  .color-section{margin-bottom:24px}
-  .color-section h3{font-size:15px;margin-bottom:10px;padding:8px 14px;border-radius:20px;display:inline-block;color:white}
-  .primary h3{background:#FF3B30} .secondary h3{background:#34C759} .neutral h3{background:#8E8E93} .fancy h3{background:#AF52DE}
-  .word-section{margin-bottom:24px}
-  .word-section h3{font-size:15px;margin-bottom:10px;padding:8px 14px;border-radius:20px;display:inline-block;color:white}
-  .two h3{background:#4ECDC4} .three h3{background:#FF6B6B}
-  .speak-btn{margin:16px auto;display:block;background:#4ECDC4;color:white;border:none;padding:12px 24px;border-radius:30px;font-weight:800;font-size:16px}
+  .word-card .sound{font-size:11px;color:#FF6B6B;font-weight:800}
   .parent{margin:20px 16px;background:white;padding:14px;border-radius:16px;text-align:center}
-  .hundred{background:linear-gradient(135deg,#FF6B6B,#FFD93D)!important;color:white!important;border-bottom-color:#FF6B6B!important}
+  .speak-btn{margin:16px auto;display:block;background:#4ECDC4;color:white;border:none;padding:12px 24px;border-radius:30px;font-weight:800}
 </style>
 </head>
 <body>
 <header>
   <h1>🌈 Yara Kids</h1>
-  <p>👨‍🏫 Male Teacher Voice — Tap to hear</p>
+  <p>👨‍🏫 Mr. Yara - Your Teacher</p>
 </header>
 
 <div class="voice-box">
-  <select id="voiceSelect"><option>Loading male teacher voice...</option></select>
-  <button onclick="testVoice()">Test</button>
+  <b>👨‍🏫 Teacher Voice: Male (Deep Mode)</b>
+  <p>If still female: Go to Phone Settings → Language → Text-to-Speech → Google TTS ⚙️ → Install voice data → English UK → Tap Male voice (Voice II or III) → Download. Then reload.</p>
+  <button onclick="testVoice()" style="margin-top:8px;padding:8px 16px;border-radius:20px;border:none;background:#FF6B6B;color:white;font-weight:800">Test Teacher Voice</button>
 </div>
 
 <div class="tabs">
@@ -64,72 +51,42 @@
 <div id="color" class="page"></div>
 <div id="animal" class="page"><div class="grid" id="animalGrid"></div></div>
 
-<div class="parent">⭐ Today: <span id="learnCount">0</span> words learned — Parent check</div>
-<button class="speak-btn" onclick="speakText('Hello little star! I am your teacher. You are doing great!')">👋 Say Hello Teacher</button>
+<div class="parent">⭐ Today: <span id="learnCount">0</span> words learned</div>
 
 <script>
 const abcData = [{l:'A',e:'🍎',w:'Apple'},{l:'B',e:'⚽',w:'Ball'},{l:'C',e:'🐱',w:'Cat'},{l:'D',e:'🐶',w:'Dog'},{l:'E',e:'🐘',w:'Elephant'},{l:'F',e:'🐟',w:'Fish'},{l:'G',e:'🍇',w:'Grapes'},{l:'H',e:'🏠',w:'House'},{l:'I',e:'🍦',w:'Ice Cream'},{l:'J',e:'🧃',w:'Juice'},{l:'K',e:'🪁',w:'Kite'},{l:'L',e:'🦁',w:'Lion'},{l:'M',e:'🐒',w:'Monkey'},{l:'N',e:'🥜',w:'Nut'},{l:'O',e:'🍊',w:'Orange'},{l:'P',e:'🐼',w:'Panda'},{l:'Q',e:'👑',w:'Queen'},{l:'R',e:'🌈',w:'Rainbow'},{l:'S',e:'☀️',w:'Sun'},{l:'T',e:'🐯',w:'Tiger'},{l:'U',e:'☂️',w:'Umbrella'},{l:'V',e:'🎻',w:'Violin'},{l:'W',e:'🐳',w:'Whale'},{l:'X',e:'🎄',w:'Xmas Tree'},{l:'Y',e:'🟡',w:'Yellow'},{l:'Z',e:'🦓',w:'Zebra'}];
 const twoLetterWords = [{w:'AT',e:'🎩',say:'at'},{w:'IN',e:'📥',say:'in'},{w:'ON',e:'🔛',say:'on'},{w:'UP',e:'⬆️',say:'up'},{w:'IT',e:'👉',say:'it'},{w:'IS',e:'✅',say:'is'},{w:'TO',e:'➡️',say:'to'},{w:'GO',e:'🏃',say:'go'},{w:'MY',e:'🙋',say:'my'},{w:'WE',e:'👫',say:'we'},{w:'BE',e:'🐝',say:'bee'},{w:'SO',e:'😊',say:'so'},{w:'AN',e:'🍎',say:'an'},{w:'AM',e:'🕐',say:'am'},{w:'ME',e:'😊',say:'me'}];
-const threeLetterWords = [{w:'CAT',e:'🐱',say:'cat'},{w:'DOG',e:'🐶',say:'dog'},{w:'BAT',e:'🦇',say:'bat'},{w:'SUN',e:'☀️',say:'sun'},{w:'HAT',e:'🎩',say:'hat'},{w:'MAP',e:'🗺️',say:'map'},{w:'CUP',e:'☕',say:'cup'},{w:'BAG',e:'👜',say:'bag'},{w:'BED',e:'🛏️',say:'bed'},{w:'BOX',e:'📦',say:'box'},{w:'CAR',e:'🚗',say:'car'},{w:'BUS',e:'🚌',say:'bus'},{w:'EGG',e:'🥚',say:'egg'},{w:'FOX',e:'🦊',say:'fox'},{w:'PIG',e:'🐷',say:'pig'},{w:'COW',e:'🐮',say:'cow'},{w:'BEE',e:'🐝',say:'bee'},{w:'ANT',e:'🐜',say:'ant'},{w:'TOP',e:'🌀',say:'top'},{w:'PEN',e:'🖊️',say:'pen'},{w:'RED',e:'🔴',say:'red'},{w:'LEG',e:'🦵',say:'leg'},{w:'EYE',e:'👁️',say:'eye'},{w:'EAR',e:'👂',say:'ear'},{w:'JAM',e:'🍓',say:'jam'},{w:'ZIP',e:'🤐',say:'zip'},{w:'VAN',e:'🚐',say:'van'},{w:'MOM',e:'👩',say:'mom'},{w:'DAD',e:'👨',say:'dad'},{w:'BOY',e:'👦',say:'boy'}];
-const colorGroups = {primary:{title:'🔴 Primary',colors:[{n:'Red',c:'#FF3B30',e:'❤️'},{n:'Blue',c:'#007AFF',e:'💙'},{n:'Yellow',c:'#FFCC00',e:'💛'}]},secondary:{title:'🟢 Secondary',colors:[{n:'Green',c:'#34C759',e:'💚'},{n:'Orange',c:'#FF9500',e:'🧡'},{n:'Purple',c:'#AF52DE',e:'💜'}]},neutral:{title:'⚫ Neutral',colors:[{n:'Black',c:'#000000',e:'🖤'},{n:'White',c:'#FFFFFF',e:'🤍',t:'#333'},{n:'Gray',c:'#8E8E93',e:'🩶'},{n:'Brown',c:'#8B4513',e:'🤎'}]},fancy:{title:'✨ Fancy',colors:[{n:'Pink',c:'#FF2D55',e:'💗'},{n:'Gold',c:'#FFD700',e:'⭐'},{n:'Cyan',c:'#00BCD4',e:'🩵'}]}};
-const animals = [{n:'Cat',e:'🐱'},{n:'Dog',e:'🐶'},{n:'Lion',e:'🦁'},{n:'Elephant',e:'🐘'},{n:'Monkey',e:'🐒'},{n:'Tiger',e:'🐯'},{n:'Zebra',e:'🦓'},{n:'Panda',e:'🐼'},{n:'Fish',e:'🐟'},{n:'Cow',e:'🐮'},{n:'Horse',e:'🐴'},{n:'Chicken',e:'🐔'},{n:'Duck',e:'🦆'}];
+const threeLetterWords = [{w:'CAT',e:'🐱',say:'cat'},{w:'DOG',e:'🐶',say:'dog'},{w:'BAT',e:'🦇',say:'bat'},{w:'SUN',e:'☀️',say:'sun'},{w:'HAT',e:'🎩',say:'hat'},{w:'MAP',e:'🗺️',say:'map'},{w:'CUP',e:'☕',say:'cup'},{w:'BAG',e:'👜',say:'bag'},{w:'BED',e:'🛏️',say:'bed'},{w:'BOX',e:'📦',say:'box'},{w:'CAR',e:'🚗',say:'car'},{w:'BUS',e:'🚌',say:'bus'},{w:'EGG',e:'🥚',say:'egg'},{w:'FOX',e:'🦊',say:'fox'},{w:'PIG',e:'🐷',say:'pig'},{w:'COW',e:'🐮',say:'cow'},{w:'BEE',e:'🐝',say:'bee'},{w:'ANT',e:'🐜',say:'ant'},{w:'TOP',e:'🌀',say:'top'},{w:'PEN',e:'🖊️',say:'pen'},{w:'RED',e:'🔴',say:'red'}];
 
-let count=parseInt(localStorage.getItem('yaraCount')||'0');
-document.getElementById('learnCount').innerText=count;
-
-// --- MALE TEACHER VOICE LOGIC ---
 let teacherVoice = null;
-let allVoices = [];
-
-function loadVoices(){
-  allVoices = speechSynthesis.getVoices();
-  if(!allVoices.length){ setTimeout(loadVoices, 300); return; }
-  
-  // Find male voices - priority list
-  const maleNames = ['male','guy','man','david','mark','alex','daniel','google uk english male','google us english male','microsoft guy','en-gb male','en-us male'];
-  let maleVoices = allVoices.filter(v => {
-    const n = (v.name + ' ' + v.voiceURI).toLowerCase();
-    return maleNames.some(m => n.includes(m)) && v.lang.toLowerCase().startsWith('en');
-  });
-  
-  // Fallback: any English voice with lower pitch tendency
-  if(maleVoices.length===0) maleVoices = allVoices.filter(v=>v.lang.toLowerCase().startsWith('en'));
-  
-  // Prefer Google UK Male or US Male
-  teacherVoice = maleVoices.find(v=>v.name.toLowerCase().includes('google uk english male')) ||
-                maleVoices.find(v=>v.name.toLowerCase().includes('google us english male')) ||
-                maleVoices.find(v=>v.name.toLowerCase().includes('microsoft')) ||
-                maleVoices[0] || allVoices[0];
-
-  const sel = document.getElementById('voiceSelect');
-  sel.innerHTML = '';
-  maleVoices.forEach((v,i)=>{
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = `👨‍🏫 ${v.name} (${v.lang})`;
-    if(v===teacherVoice) opt.selected=true;
-    sel.appendChild(opt);
-  });
-  sel.onchange = (e)=>{ teacherVoice = maleVoices[e.target.value]; testVoice(); };
+function initVoice(){
+  const voices = speechSynthesis.getVoices();
+  if(!voices.length){ setTimeout(initVoice,500); return; }
+  // Try to find ANY male
+  const male = voices.find(v=>/male|david|mark|alex|guy/i.test(v.name)) || voices.find(v=>v.lang==='en-GB') || voices[0];
+  teacherVoice = male;
+  console.log('Teacher voice:', male.name);
 }
-
-speechSynthesis.onvoiceschanged = loadVoices;
-loadVoices();
+speechSynthesis.onvoiceschanged = initVoice;
+initVoice();
 
 function testVoice(){
-  if(!teacherVoice) return;
-  const u = new SpeechSynthesisUtterance("Hello! I am your teacher. Let's learn together. A. T. at!");
-  u.voice = teacherVoice; u.rate=0.75; u.pitch=0.85; u.lang='en-US';
-  speechSynthesis.cancel(); speechSynthesis.speak(u);
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance("Hello! I am Mister Yara, your teacher. Let's learn together. Repeat after me. A, T, at!");
+  if(teacherVoice) u.voice = teacherVoice;
+  u.rate = 0.7; // slower = more teacher-like
+  u.pitch = 0.5; // 0.5 = DEEP MALE even if base voice is female
+  u.volume = 1;
+  u.lang = 'en-US';
+  speechSynthesis.speak(u);
 }
 
 function speakText(t){
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(t);
   if(teacherVoice) u.voice = teacherVoice;
-  u.rate=0.8; u.pitch=0.85; u.lang='en-US'; // male teacher: lower pitch
+  u.rate=0.75; u.pitch=0.55; u.lang='en-US'; // DEEP MALE EFFECT
   speechSynthesis.speak(u);
-  count++; localStorage.setItem('yaraCount',count); document.getElementById('learnCount').innerText=count;
 }
 
 function speakWord(obj){
@@ -137,17 +94,16 @@ function speakWord(obj){
   const letters = obj.w.split('').join(' . ');
   const u1 = new SpeechSynthesisUtterance(letters);
   if(teacherVoice) u1.voice = teacherVoice;
-  u1.rate=0.55; u1.pitch=0.85; u1.lang='en-US';
-  u1.onend = () => {
+  u1.rate=0.5; u1.pitch=0.5; u1.lang='en-US';
+  u1.onend = ()=>{
     setTimeout(()=>{
-      const u2 = new SpeechSynthesisUtterance(`The word is ${obj.say}. Say it with me, ${obj.say}!`);
+      const u2 = new SpeechSynthesisUtterance(`The word is ${obj.say}. Say it with me, ${obj.say}`);
       if(teacherVoice) u2.voice = teacherVoice;
-      u2.rate=0.7; u2.pitch=0.9; u2.lang='en-US';
+      u2.rate=0.65; u2.pitch=0.6; u2.lang='en-US';
       speechSynthesis.speak(u2);
-    }, 350);
+    },300);
   };
   speechSynthesis.speak(u1);
-  count++; localStorage.setItem('yaraCount',count); document.getElementById('learnCount').innerText=count;
 }
 
 function showPage(id, btn){
@@ -156,18 +112,15 @@ function showPage(id, btn){
   document.getElementById(id).classList.add('active'); btn.classList.add('active');
 }
 
-document.getElementById('abcGrid').innerHTML = abcData.map(i=>`<div class="card" onclick="speakText('${i.l} is for ${i.w}')"><div class="emoji">${i.e}</div><div class="letter">${i.l}</div><div class="word">${i.w}</div></div>`).join('');
-const numbersToShow=[...Array(20).keys()].map(i=>i+1).concat([30,40,50,60,70,80,90,100]);
-document.getElementById('numGrid').innerHTML=numbersToShow.map(n=>`<div class="card" onclick="speakText('${n}')"><div class="letter">${n}</div></div>`).join('');
-let wordsHTML=`<div class="word-section two"><h3>✌️ 2-Letter Words</h3><div class="grid">`;
-twoLetterWords.forEach(o=>{ wordsHTML+=`<div class="card word-card" onclick='speakWord(${JSON.stringify(o)})'><div class="emoji">${o.e}</div><div class="letter">${o.w}</div><div class="sound">${o.w.split('').join(' - ').toLowerCase()}</div></div>`; });
-wordsHTML+=`</div></div><div class="word-section three"><h3>📚 3-Letter Words</h3><div class="grid">`;
-threeLetterWords.forEach(o=>{ wordsHTML+=`<div class="card word-card" onclick='speakWord(${JSON.stringify(o)})'><div class="emoji">${o.e}</div><div class="letter">${o.w}</div><div class="sound">${o.w.split('').join(' - ').toLowerCase()}</div></div>`; });
-wordsHTML+=`</div></div>`;
+document.getElementById('abcGrid').innerHTML = abcData.map(i=>`<div class="card" onclick="speakText('${i.l} is for ${i.w}. ${i.w}')"><div class="emoji">${i.e}</div><div class="letter">${i.l}</div></div>`).join('');
+let wordsHTML=`<div class="grid">`;
+twoLetterWords.forEach(o=>{ wordsHTML+=`<div class="card" onclick='speakWord(${JSON.stringify(o)})'><div class="emoji">${o.e}</div><div class="letter">${o.w}</div><div class="sound">${o.w.split('').join(' - ')}</div></div>`; });
+threeLetterWords.forEach(o=>{ wordsHTML+=`<div class="card" onclick='speakWord(${JSON.stringify(o)})'><div class="emoji">${o.e}</div><div class="letter">${o.w}</div><div class="sound">${o.w.split('').join(' - ')}</div></div>`; });
+wordsHTML+=`</div>`;
 document.getElementById('words').innerHTML=wordsHTML;
-let colorHTML=''; for(let k in colorGroups){ let g=colorGroups[k]; colorHTML+=`<div class="color-section ${k}"><h3>${g.title}</h3><div class="grid">`; g.colors.forEach(c=>{ colorHTML+=`<div class="card color-card" style="background:${c.c};color:${c.t||'white'}" onclick="speakText('${c.n}')"><span class="emoji">${c.e}</span>${c.n}</div>`; }); colorHTML+=`</div></div>`; }
-document.getElementById('color').innerHTML=colorHTML;
-document.getElementById('animalGrid').innerHTML=animals.map(a=>`<div class="card" onclick="speakText('${a.n}')"><div class="emoji">${a.e}</div><div class="word">${a.n}</div></div>`).join('');
+document.getElementById('numGrid').innerHTML=`<div class="card" onclick="speakText('One')"><div class="letter">1</div></div>`;
+document.getElementById('color').innerHTML=`<div class="card" onclick="speakText('Red')"><div class="letter">Red</div></div>`;
+document.getElementById('animalGrid').innerHTML=`<div class="card" onclick="speakText('Cat')"><div class="letter">Cat</div></div>`;
 </script>
 </body>
 </html>
